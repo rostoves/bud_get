@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Operations List{% endblock %}
+
+{% block main %}
+<table>
+    <tr>
+        <th>id</th>
+        <th>date</th>
+        <th>sum</th>
+        <th>card</th>
+        <th>payee</th>
+        <th>desc</th>
+        <th>mcc</th>
+        <th>category</th>
+        <th>type</th>
+    </tr>
+    {% for row in op_list_table %}
+    <tr>
+        {% for cell in row %}
+           <td>{{ cell }}</td>
+        {% endfor %}
+    {% endfor %}
+    </tr>
+</table>
+{% endblock %}
