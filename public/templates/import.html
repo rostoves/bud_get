@@ -4,8 +4,15 @@
 
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="/js/papaparse.js"></script>
     <script src="/js/import.js"></script>
+
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/css/style.css">
 {% endblock %}
 
 {% block main %}
@@ -18,16 +25,13 @@
 <table class="importTable">
     <tr class="importTableHeader">
         <th>Дата операции</th>
-        <th>Дата платежа</th>
         <th>Номер карты</th>
         <th>Статус</th>
         <th>Сумма операции</th>
         <th>Валюта операции</th>
         <th>Сумма платежа</th>
         <th>Валюта платежа</th>
-        <th>Кэшбэк</th>
         <th>Категория</th>
-        <th>MCC</th>
         <th>Описание</th>
         <th>Бонусы (включая кэшбэк)</th>
     </tr>

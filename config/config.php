@@ -12,7 +12,7 @@ foreach ($lib_files as $file){
     }
 }
 
-function prepareVariables($page_name, $action = "") {
+function prepareVariables($page_name) {
     $vars = [
         "main_menu_links" => [
             [
@@ -35,19 +35,9 @@ function prepareVariables($page_name, $action = "") {
         case "index":
             break;
         case "oplist":
-//            if($action == "") {
-//
-//            } else {
-                $vars['op_list_table'] = OperationList::getOperationsList();
-//            }
+            $vars['op_list_table'] = OperationList::getOperationsList();
             break;
         case "import":
-            if($action == "") {
-
-            } else {
-                $import = new Import();
-                $vars['response'] = $import->initImportAction($action);
-            }
             break;
     }
 
