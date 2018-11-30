@@ -4,6 +4,7 @@ $(document).ready(function () {
 });
 var file;
 var parsedCsv;
+var mccArray = [];
 
 function prepareButtons(){
     $('.importForm').on('change', parseFile);
@@ -18,10 +19,15 @@ function loadCategories() {
         data: {
             action: 'import/getMCC'
         },
-        complete: function (data) {
-            console.log(data);
+        success: function (data) {
+            for (var i = 0; i<data.length; i++) {
+                mccArray.push(data[i].name);
+            }
+            console.log(mccArray);
         }
-    })
+    });
+
+
 }
 
 function parseFile() {
@@ -36,7 +42,7 @@ function parseFile() {
         escapeChar: '',
         header: false,
         transformHeader: undefined,
-        dynamicTyping: true,
+        dynamicTyping: false,
         preview: 0,
         encoding: "CP1251",
         worker: false,
@@ -70,10 +76,18 @@ function importFile() {
                     break;
                 case 1:
                 case 8:
+                case 10:
                     break;
                 case 4:
                 case 6:
                     $( $( "#importTableRow_" + i) ).append( "<td><input value='" + parsedCsv[i][j] + "'></td>" );
+                    break;
+                case 9:
+                    if (mccArray.indexOf(parsedCsv[i][j]) != -1 ) {
+                        $( $( "#importTableRow_" + i) ).append( "<td><input class='importCategory' value='" + parsedCsv[i][j] + "'></td>" );
+                    } else {
+                        $( $( "#importTableRow_" + i) ).append( "<td><input class='importCategory red' value='" + parsedCsv[i][j] + "'></td>" );
+                    }
                     break;
                 case 12:
                     $( $( "#importTableRow_" + i) ).append( "<td><input value='" + parsedCsv[i][j].slice(0, -1) + "'></td>" );
@@ -89,6 +103,13 @@ function importFile() {
         $( $( ".importTable" ) ).append( "</tr>" );
     }
     $('.splitButton').on('click', rowInsertAfter);
+    autocompleteCategories();
+}
+
+function autocompleteCategories() {
+    $('.importCategory').autocomplete({
+        source: mccArray
+    });
 }
 
 function rowInsertAfter() {
@@ -100,13 +121,13 @@ function rowInsertAfter() {
     var operation_cur = "<td>" + parsedCsv[row][5] + "</td>";
     var bargain_sum = "<td><input value='0,00'></td>";
     var bargain_cur = "<td>" + parsedCsv[row][7] + "</td>";
-    var category = "<td>" + parsedCsv[row][9] + "</td>";
-    var mcc = "<td>" + parsedCsv[row][10] + "</td>";
+    var category = "<td><input class='importCategory' value='" + parsedCsv[row][9] + "'></td>";
     var desc = "<td>" + parsedCsv[row][11] + "</td>";
     var bonuses = "<td><input value='0,00'></td>";
     $( $( "#importTableRow_" + row) ).after(
         "<tr id='importTableRow_" + row + ".1'>"
-        + date + card + status + operation_sum + operation_cur + bargain_sum + bargain_cur + category + mcc + desc + bonuses +
+        + date + card + status + operation_sum + operation_cur + bargain_sum + bargain_cur + category + desc + bonuses +
         "</tr>"
     );
+    autocompleteCategories();
 }

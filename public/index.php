@@ -9,7 +9,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
     $_action = $_POST['action'];
     switch($_action) {
         case 'import/getMCC':
-            Import::getMccList();
+            echo Import::getMccList();
             break;
     }
 } else {
