@@ -9,4 +9,10 @@ class Import
         _log("Import MCC response: " . $mcc);
         return $mcc;
     }
+
+    public static function insertOperationsTable($data) {
+        $json = json_encode($data);
+        $response = DataBase::getDB()->getAssocQuery('EXECUTE [dbo].[source_data_import] ' . $json);
+        _log($response);
+    }
 }

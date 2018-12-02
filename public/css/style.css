@@ -1,3 +1,16 @@
+.importTable,
+.importTableHeader,
+.importTableRow {
+    display: grid;
+    grid-gap: 5px;
+    text-align: center;
+}
+
+.importTableHeader,
+.importTableRow {
+    grid-template-columns: 140px 70px 70px 90px 70px 90px 70px 120px 400px 70px 250px 80px 80px;
+}
+
 .red {
     background-color: rosybrown;
 }

@@ -1,5 +1,4 @@
 <?php
-include '..\config\config.db.php';
 
 class DataBase extends DB_config
 {

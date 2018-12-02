@@ -5,11 +5,14 @@ Twig_Autoloader::register();
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     _log("POST: ");
-    _log($_POST);
+    _log($_POST['action']);
     $_action = $_POST['action'];
     switch($_action) {
         case 'import/getMCC':
             echo Import::getMccList();
+            break;
+        case 'import/postTable':
+            Import::insertOperationsTable($_POST['table']);
             break;
     }
 } else {
@@ -19,20 +22,15 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
     if($url_array[1] != "")
         $page_name = $url_array[1];
 
-    $action = "";
-    if($url_array[2] != "")
-        $action = $url_array[2];
-
     $variables = prepareVariables($page_name);
 
     $loader = new Twig_Loader_Filesystem('templates');
 
     $twig = new Twig_Environment($loader, array(
-            'cache'       => 'compilation_cache',
             'auto_reload' => true)
     );
 
-    _log("Render: " . $page_name . ". Variables: ");
+    _log("Render: " . $page_name);
 //    _log($variables);
     echo $twig->render($page_name . '.html', $variables);
 }
