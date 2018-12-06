@@ -56,9 +56,7 @@ function loadCategories() {
             action: 'import/getMCC'
         },
         success: function (data) {
-            for (var i = 0; i<data.length; i++) {
-                mccArray.push(data[i].name);
-            }
+            mccArray = data;
             console.log(mccArray);
         }
     });
