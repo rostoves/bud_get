@@ -1,47 +1,56 @@
 <?php
 
-class DataBase extends DB_config
+class Database extends PDO
 {
-    private static $db = null;
-    private $conn;
+    private static $_instance = null;
 
-    public static function getDB() {
-        if (self::$db == null) self::$db = new DataBase();
-        return self::$db;
+    private $db;
+
+    public static function getInstance()
+    {
+        if (self::$_instance == null) {
+            self::$_instance = new Database();
+        }
+        return self::$_instance;
     }
 
-    private function __construct() {
-        $this->conn = sqlsrv_connect($this->serverName, $this->connectionInfo);
-
-        if($this->conn) {
-           // echo "Connection established.<br />";
-        } else {
-            echo "Connection could not be established.<br />";
-            die( print_r( sqlsrv_errors(), true));
-        }
+    public function __construct() {
+        $this->db = new PDO(PDO_DSN, PDO_USER, PDO_PASSWORD, PDO_OPTIONS);
     }
 
-    public function executeQuery($sql){
-        $stmt = sqlsrv_query($this->conn, $sql);
-        if( $stmt === false) {
-            die( print_r( sqlsrv_errors(), true) );
-        }
+    public function query($query, $params = array())
+    {
+        $res = $this->db->prepare($query);
+        $res->execute($params);
+        return $res;
     }
 
-    function getAssocQuery($sql){
-        $stmt = sqlsrv_query($this->conn, $sql);
-        if( $stmt === false) {
-            die( print_r( sqlsrv_errors(), true) );
+    public function exec($query, $params = null)
+    {
+        $stmt = $this->db->prepare($query);
+        for ($i = 0; $i < count($params); $i++) {
+            $stmt->bindParam($i + 1, $params[$i]);
         }
-
-        $array_result = array();
-        while( $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC) ) {
-            $array_result[] = $row;
-        }
-        return $array_result;
+        $stmt->execute();
     }
 
-    public function __destruct() {
-        if ($this->conn) sqlsrv_close($this->conn);
+    public function select($query, $params = array())
+    {
+        $result = $this->query($query, $params);
+        return $result->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function selectColumn($query, $params = array())
+    {
+        $result = $this->query($query, $params);
+        $array = $result->fetchAll(PDO::FETCH_NUM);
+        $column = [];
+        foreach ($array as $v1) {
+            foreach ($v1 as $v2) {
+                array_push($column, $v2);
+            }
+        }
+
+        return $column;
     }
 }
