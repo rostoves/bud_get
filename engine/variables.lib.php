@@ -9,11 +9,14 @@ function prepareVariables($page_name) {
             [
                 "href" => "/oplist/",
                 "link_title" => "Operations List"
-            ]
-            ,
+            ],
             [
                 "href" => "/import/",
                 "link_title" => "Import"
+            ],
+            [
+                "href" => "/categories/",
+                "link_title" => "Categories"
             ]
         ]
     ];
@@ -25,6 +28,8 @@ function prepareVariables($page_name) {
             $vars['op_list_table'] = OperationList::getOperationsList();
             break;
         case "import":
+            break;
+        case "categories":
             break;
     }
 
