@@ -1,20 +1,11 @@
 <?php
-require_once('../config/config.php');
+require_once '../config/config.php';
 require_once '../libs/Twig/Autoloader.php';
 Twig_Autoloader::register();
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
-    _log("POST: ");
-    _log($_POST['action']);
-    $_action = $_POST['action'];
-    switch($_action) {
-        case 'import/getMCC':
-            echo Import::getMccList();
-            break;
-        case 'import/postTable':
-            Import::insertOperationsTable($_POST['table']);
-            break;
-    }
+    _log("POST: " . $_POST['action']);
+    switchAction($_POST['action']);
 } else {
     $url_array = explode("/", $_SERVER['REQUEST_URI']);
 

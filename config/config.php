@@ -1,6 +1,13 @@
 <?php
 define('SITE_ROOT', "../");
 define('ENGINE_DIR', SITE_ROOT . 'engine/');
+define('PDO_DRIVER', 'sqlsrv:');
+define('PDO_SERVER', 'Server=DESKTOP-PRQ9S2D\\SQLEXPRESS;');
+define('PDO_DB', 'Database=budget');
+define('PDO_DSN', PDO_DRIVER . PDO_SERVER . PDO_DB);
+define('PDO_USER', 'sa');
+define('PDO_PASSWORD', '123qweASD');
+define('PDO_OPTIONS', array("CharacterSet" => "UTF-8", "ReturnDatesAsStrings" => 1));
 
 $lib_files = scandir(ENGINE_DIR);
 
@@ -8,49 +15,7 @@ foreach ($lib_files as $file){
     if($file != "." && $file != ".."){
         if(substr($file, -4) == ".php"){
             include_once (ENGINE_DIR . $file);
+
         }
     }
-}
-
-function prepareVariables($page_name) {
-    $vars = [
-        "main_menu_links" => [
-            [
-                "href" => "/",
-                "link_title" => "Main"
-            ],
-            [
-                "href" => "/oplist/",
-                "link_title" => "Operations List"
-            ]
-            ,
-            [
-                "href" => "/import/",
-                "link_title" => "Import"
-            ]
-        ]
-    ];
-
-    switch ($page_name) {
-        case "index":
-            break;
-        case "oplist":
-            $vars['op_list_table'] = OperationList::getOperationsList();
-            break;
-        case "import":
-            break;
-    }
-
-    return $vars;
-}
-
-class DB_config
-{
-    protected $serverName = "DESKTOP-PRQ9S2D\\SQLEXPRESS";
-    protected $connectionInfo = array( "Database"=>"budget",
-        "UID"=>"sa",
-        "PWD"=>"123qweASD",
-        "CharacterSet" => "UTF-8",
-        "ReturnDatesAsStrings" => 1);
-
 }
