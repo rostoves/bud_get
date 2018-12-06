@@ -8,11 +8,6 @@ class Import
     }
 
     public function insertOperationsTable($data) {
-        $data = [
-                ["02.12.2018 14:01:50","*0816","OK","-411,00","RUB","-411,00","RUB","Красота","Yves Rocher","0,00",""],
-                ["02.12.2018 13:59:56","*0816","OK","-427,00","RUB","-427,00","RUB","Красота","Yves Rocher","0,00",""],
-                ["02.12.2018 02:49:13","*3629","OK","-36,65","EUR","-2833,04","RUB","Отели","TALLINK EXPRESS HOTELL","0,00",""]
-                ];
 //        _log($data);
         $mcc = $this->getColumn('[name]', '[merchant_codes]');
         $cur = $this->getColumn('[code]', '[currencies]');
