@@ -1,6 +1,6 @@
 $(document).ready(function () {
     prepareButtons();
-    loadCategories();
+    loadMcc();
 });
 var file;
 var parsedCsv;
@@ -10,10 +10,10 @@ var importTableArray = [];
 function prepareButtons(){
     $('.importForm').on('change', parseFile);
     $('.importButton').on('click', importFile);
-    $('.exportButton').on('click', collectTableArray);
+    $('.exportButton').on('click', collectImportArray);
 }
 
-function collectTableArray() {
+function collectImportArray() {
     importTableArray = [];
     $(".importTable div").each(function() {
         var arrayOfThisRow = [];
@@ -38,7 +38,7 @@ function collectTableArray() {
         url: "/",
         type: "POST",
         data: {
-            action: 'import/postTable',
+            action: 'import/importTable',
             table: importTableArray
         },
         complete: function (data) {
@@ -47,7 +47,7 @@ function collectTableArray() {
     });
 }
 
-function loadCategories() {
+function loadMcc() {
     $.ajax({
         url: "/",
         type: "POST",
@@ -188,12 +188,13 @@ function rowInsertAfter() {
     var bargain_sum = "<input value='0,00'>";
     var bargain_cur = "<span>" + parsedCsv[row][7] + "</span>";
     var category = "<input class='importCategory' value='" + parsedCsv[row][9] + "'>";
-    var desc = "<span>" + parsedCsv[row][11] + "</span>";
+    var desc = "<input value='" + parsedCsv[row][11] + "'>";
     var bonuses = "<input value='0,00'>";
+    var comment = "<input>";
     var deleteButton = "<button class='deleteButton' id='d" + row + "_1'>Удалить</button>";
     $( $( "#tr_" + row) ).after(
-        "<div id='tr_" + row + "_1'>"
-        + date + card + status + operation_sum + operation_cur + bargain_sum + bargain_cur + category + desc + bonuses + deleteButton +
+        "<div class='importTableRow' id='tr_" + row + "_1'>"
+        + date + card + status + operation_sum + operation_cur + bargain_sum + bargain_cur + category + desc + bonuses + comment + deleteButton +
         "</div>"
     );
     autocompleteCategories();
