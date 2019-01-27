@@ -53,4 +53,19 @@ class Database extends PDO
 
         return $column;
     }
+
+    public function getColumn($column, $table)
+    {
+        return $this->selectColumn('SELECT '.$column.' FROM [dbo].'.$table);
+    }
+
+    public function addRow($value, $column, $table)
+    {
+        return $this->query("INSERT INTO [dbo].".$table." (".$column.") VALUES ('".$value."')");
+    }
+
+    public function updateCellValue ($columnUpdate, $columnUpdateValue, $columnCondition, $columnConditionValue, $table)
+    {
+        return $this->query("UPDATE [dbo].".$table." SET ".$columnUpdate." = ".$columnUpdateValue." WHERE ".$columnCondition." = ".$columnConditionValue);
+    }
 }

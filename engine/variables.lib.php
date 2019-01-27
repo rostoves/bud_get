@@ -9,11 +9,14 @@ function prepareVariables($page_name) {
             [
                 "href" => "/oplist/",
                 "link_title" => "Operations List"
-            ]
-            ,
+            ],
             [
                 "href" => "/import/",
                 "link_title" => "Import"
+            ],
+            [
+                "href" => "/categories/",
+                "link_title" => "Categories"
             ]
         ]
     ];
@@ -26,6 +29,8 @@ function prepareVariables($page_name) {
             break;
         case "import":
             break;
+        case "categories":
+            break;
     }
 
     return $vars;
@@ -37,9 +42,29 @@ function switchAction($action) {
             $import = new Import;
             echo $import->getMccList();
             break;
-        case 'import/postTable':
+        case 'import/importTable':
             $import = new Import;
             $import->insertOperationsTable($_POST['table']);
+            break;
+        case 'categories/getTypes':
+            $cats = new Categories;
+            echo $cats->getTypesList();
+            break;
+        case 'categories/getCats':
+            $cats = new Categories;
+            echo $cats->getCategoriesList();
+            break;
+        case 'categories/getMCC':
+            $cats = new Categories;
+            echo $cats->getMccList();
+            break;
+        case 'categories/updateMccCat':
+            $cats = new Categories;
+            $cats->updateMccCat($_POST['mccId'], $_POST['newMccCatId']);
+            break;
+        case 'categories/updateCatType':
+            $cats = new Categories;
+            $cats->updateCatType($_POST['catId'], $_POST['newCatTypeId']);
             break;
     }
 }
