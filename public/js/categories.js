@@ -1,62 +1,40 @@
-$(document).ready(function () {
-    loadTypes();
-    loadCats();
-    loadMcc();
-});
-
 var typesArray = [];
 var catsArray = [];
 var mccArray = [];
 
-function loadTypes() {
-    $.ajax({
-        url: "/",
-        type: "POST",
-        dataType: "json",
-        data: {
-            action: 'categories/getTypes'
-        },
-        success: function (data) {
-            typesArray = data;
-        }
+$(document).ready(function () {
+    loadData('categories/getTypes', function () {
+        typesArray = this;
     });
+    loadData('categories/getCats', function () {
+        renderCatsTable(this);
+    });
+    loadData('categories/getMCC', function () {
+        renderMccTable(this);
+    });
+});
+
+function renderMccTable(data) {
+    mccArray = data;
+    for (var y = 0; y < mccArray.length; y++) {
+        $(".comparisonBlockMccCats").append("<div class='comparisonBlockMcc' id='mcc_" + mccArray[y].id + "'>" + mccArray[y].name + "</div>" + renderMccCatsForm(mccArray[y].id_operations_categories, mccArray[y].id));
+    }
+    $(".comparisonBlockCategorySelect").on('change', sendComparisonMccUpdate);
 }
 
-function loadCats() {
-    $.ajax({
-        url: "/",
-        type: "POST",
-        dataType: "json",
-        data: {
-            action: 'categories/getCats'
-        },
-        success: function (data) {
-            catsArray = data;
-            renderCatsTable();
-        }
-    });
+function renderCatsTable(data) {
+    catsArray = data;
+    for (var i = 0; i < catsArray.length; i++) {
+        $(".comparisonBlockCatsTypes").append("<div class='comparisonBlockCats' id='cat_" + catsArray[i].id + "'>" + catsArray[i].name + "</div>" + renderCatsTypesForm(catsArray[i].id_operations_types, catsArray[i].id));
+    }
+    $(".comparisonBlockTypeSelect").on('change', sendComparisonCatUpdate);
 }
 
-function loadMcc() {
-    $.ajax({
-        url: "/",
-        type: "POST",
-        dataType: "json",
-        data: {
-            action: 'categories/getMCC'
-        },
-        success: function (data) {
-            mccArray = data;
-            renderMccTable();
-        }
-    });
-}
-
-function renderCatsForm(defaultCatId, mccId) {
+function renderMccCatsForm(defaultCatId, mccId) {
     var optionCatsList = '';
     for (var i = 0; i < catsArray.length; i++) {
         if (catsArray[i].id == defaultCatId) {
-            optionCatsList += "<option class='green' selected value='" + catsArray[i].id + "'>" + catsArray[i].name + "</option>";
+            optionCatsList += "<option selected value='" + catsArray[i].id + "'>" + catsArray[i].name + "</option>";
         } else {
             optionCatsList += "<option value='" + catsArray[i].id + "'>" + catsArray[i].name + "</option>";
         }
@@ -65,31 +43,17 @@ function renderCatsForm(defaultCatId, mccId) {
     return "<select class='comparisonBlockCategorySelect' id='mcc_cat_" + mccId + "'>" + optionCatsList + "</select>";
 }
 
-function renderTypesForm(defaultTypeId, catId) {
+function renderCatsTypesForm(defaultTypeId, catId) {
     var optionTypesList = '';
     for (var i = 0; i < typesArray.length; i++) {
         if (typesArray[i].id == defaultTypeId) {
-            optionTypesList += "<option class='green' selected value='" + typesArray[i].id + "'>" + typesArray[i].name + "</option>";
+            optionTypesList += "<option selected value='" + typesArray[i].id + "'>" + typesArray[i].name + "</option>";
         } else {
             optionTypesList += "<option value='" + typesArray[i].id + "'>" + typesArray[i].name + "</option>";
         }
     }
 
     return "<select class='comparisonBlockTypeSelect' id='cat_type_" + catId + "'>" + optionTypesList + "</select>";
-}
-
-function renderMccTable() {
-    for (var y = 0; y < mccArray.length; y++) {
-        $(".comparisonBlockMccCats").append("<div class='comparisonBlockMcc' id='mcc_" + mccArray[y].id + "'>" + mccArray[y].name + "</div>" + renderCatsForm(mccArray[y].id_operations_categories, mccArray[y].id));
-    }
-    $(".comparisonBlockCategorySelect").on('change', sendComparisonMccUpdate);
-}
-
-function renderCatsTable() {
-    for (var i = 0; i < catsArray.length; i++) {
-        $(".comparisonBlockCatsTypes").append("<div class='comparisonBlockCats' id='cat_" + catsArray[i].id + "'>" + catsArray[i].name + "</div>" + renderTypesForm(catsArray[i].id_operations_types, catsArray[i].id));
-    }
-    $(".comparisonBlockTypeSelect").on('change', sendComparisonCatUpdate);
 }
 
 function sendComparisonMccUpdate() {
