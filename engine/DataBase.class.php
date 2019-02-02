@@ -31,7 +31,7 @@ class Database extends PDO
         for ($i = 0; $i < count($params); $i++) {
             $stmt->bindParam($i + 1, $params[$i]);
         }
-        $stmt->execute();
+        return $stmt->execute();
     }
 
     private function select($query, $params = array())

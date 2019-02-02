@@ -7,7 +7,7 @@
         <param name="datePattern" value="Y-m-d" />
     </appender>
     <root>
-        <level value="TRACE" />
+        <level value="INFO" />
         <appender_ref ref="budgetAppender" />
     </root>
 </configuration>

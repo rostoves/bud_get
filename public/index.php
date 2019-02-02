@@ -22,7 +22,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
     );
 
     Log::getLog()->info("Rendering page: " . $page_name);
-    Log::getLog()->debug("Rendering page's variables: " . print_r($variables, 1));
+    Log::getLog()->trace("Rendering page's variables: " . print_r($variables, 1));
     echo $twig->render($page_name . '.html', $variables);
 }
 
