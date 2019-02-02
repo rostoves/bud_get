@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="/js/script.js"></script>
     {% block scripts %}{% endblock %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/css/style.css">
     {% block styles %}{% endblock %}
@@ -13,10 +18,16 @@
 <body>
 <header>
     {% block header %}
-    <nav class="mainMenu">
-        {% for item in main_menu_links %}
-            <a class="mainMenuLink" href="{{ item.href }}">{{ item.link_title }}</a>
-        {% endfor %}
+    <nav class="navbar navbar-expand-lg navbar-primary">
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                {% for item in main_menu_links %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ item.href }}">{{ item.link_title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
     </nav>
     {% endblock %}
 </header>

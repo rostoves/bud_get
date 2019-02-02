@@ -13,13 +13,15 @@
 
 {% block main %}
 
-<p>
-    <input class="importForm" id="file" type="file" name="file">
-    <input class="importButton" type="submit" value="Импортировать">
-    <input class="exportButton" type="submit" value="Загрузить">
-</p>
+<div class="form-group importButtonForm">
+    <input type="file" class="form-control-file importCsvFileInput" id="importCsvFileInput">
+    <input type="submit" id="loadFileButton" value="Загрузить файл">
+</div>
 
 <div class="importTable">
+</div>
+
+<div class="form-group importButtonForm">
 </div>
 
 {% endblock %}
