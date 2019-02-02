@@ -8,6 +8,7 @@ define('PDO_DSN', PDO_DRIVER . PDO_SERVER . PDO_DB);
 define('PDO_USER', 'sa');
 define('PDO_PASSWORD', '123qweASD');
 define('PDO_OPTIONS', array("CharacterSet" => "UTF-8", "ReturnDatesAsStrings" => 1));
+define('LOG_CONFIG', SITE_ROOT . 'config/config_log4php.xml');
 
 $lib_files = scandir(ENGINE_DIR);
 

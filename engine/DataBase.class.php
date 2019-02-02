@@ -34,13 +34,13 @@ class Database extends PDO
         $stmt->execute();
     }
 
-    public function select($query, $params = array())
+    private function select($query, $params = array())
     {
         $result = $this->query($query, $params);
         return $result->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function selectColumn($query, $params = array())
+    private function selectColumn($query, $params = array())
     {
         $result = $this->query($query, $params);
         $array = $result->fetchAll(PDO::FETCH_NUM);
@@ -59,6 +59,11 @@ class Database extends PDO
         return $this->selectColumn('SELECT '.$column.' FROM [dbo].'.$table);
     }
 
+    public function getColumns($columns, $table)
+    {
+        return $this->select('SELECT '.$columns.' FROM [dbo].'.$table);
+    }
+
     public function addRow($value, $column, $table)
     {
         return $this->query("INSERT INTO [dbo].".$table." (".$column.") VALUES ('".$value."')");
@@ -67,5 +72,10 @@ class Database extends PDO
     public function updateCellValue ($columnUpdate, $columnUpdateValue, $columnCondition, $columnConditionValue, $table)
     {
         return $this->query("UPDATE [dbo].".$table." SET ".$columnUpdate." = ".$columnUpdateValue." WHERE ".$columnCondition." = ".$columnConditionValue);
+    }
+
+    public function executeSP($sp, $paramsNames, $params)
+    {
+        return $this->exec("EXECUTE [dbo].".$sp.$paramsNames, $params);
     }
 }

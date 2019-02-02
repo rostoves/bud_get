@@ -1,0 +1,13 @@
+<configuration xmlns="http://logging.apache.org/log4php/">
+    <appender name="budgetAppender" class="LoggerAppenderDailyFile">
+        <layout class="LoggerLayoutPattern">
+            <param name="conversionPattern" value="%date{Y-m-d H:i:s,u} [%level]: [%class - %method] %message%newline" />
+        </layout>
+        <param name="file" value="../_log/%s_budget.log" />
+        <param name="datePattern" value="Y-m-d" />
+    </appender>
+    <root>
+        <level value="TRACE" />
+        <appender_ref ref="budgetAppender" />
+    </root>
+</configuration>

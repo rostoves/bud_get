@@ -4,7 +4,7 @@ require_once '../libs/Twig/Autoloader.php';
 Twig_Autoloader::register();
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
-    _log("POST: " . $_POST['action']);
+    Log::getLog()->info("Get POST request: " . $_POST['action']);
     switchAction($_POST['action']);
 } else {
     $url_array = explode("/", $_SERVER['REQUEST_URI']);
@@ -21,8 +21,8 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             'auto_reload' => true)
     );
 
-    _log("Render: " . $page_name);
-//    _log($variables);
+    Log::getLog()->info("Rendering page: " . $page_name);
+    Log::getLog()->debug("Rendering page's variables: " . print_r($variables, 1));
     echo $twig->render($page_name . '.html', $variables);
 }
 
