@@ -64,6 +64,41 @@ class Database extends PDO
         return $this->select('SELECT '.$columns.' FROM [dbo].'.$table);
     }
 
+    public function getColumnsSingleWhere($columns, $table, $where, $condition)
+    {
+        return $this->select("SELECT ".$columns." FROM [dbo].".$table." WHERE ".$where." = ('".$condition."')");
+    }
+
+    public function getColumnsWhere($columns, $table, $conditions)
+    {
+        $counter = 0;
+        $where = "";
+        foreach ($conditions as $key => $value) {
+            if ($counter > 0) $where .= " AND ";
+
+            $where .= $key . " in (";
+
+            for($i=0; $i< count($value); $i++) {
+                switch ($i) {
+                    case count($value) - 1:
+                        $where .= "'" . $value[$i] . "')";
+                        break;
+                    default:
+                        $where .= "'" . $value[$i] . "', ";
+                        break;
+                }
+            }
+
+            $counter++;
+        }
+        return $this->select('SELECT '.$columns.' FROM [dbo].'.$table.' WHERE '.$where);
+    }
+
+    public function callScalarFunc($func, $params, $as = 'as')
+    {
+        return $this->select("SELECT [dbo].".$func." (".$params.") as ".$as);
+    }
+
     public function addRow($value, $column, $table)
     {
         return $this->query("INSERT INTO [dbo].".$table." (".$column.") VALUES ('".$value."')");

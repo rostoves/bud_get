@@ -7,6 +7,8 @@ class Import
         return json_encode(Database::getInstance()->getColumn('[name]', '[merchant_codes]'));
     }
 
+
+
     public function insertOperationsTable($data) {
         Log::getLog()->trace("Get array for operations insert: ".print_r($data, 1));
         $mcc = Database::getInstance()->getColumn('[name]', '[merchant_codes]');
@@ -21,14 +23,20 @@ class Import
         $operationsCounter = '';
 
         foreach ($data as $row) {
-            if ($this->callOperationsSP($row)) $operationsCounter++;
+            $params = "'".$row[0]."','".$row[7]."','".$row[5]."'";
+            $check = Database::getInstance()->callScalarFunc('[check_operation_exist]',$params, 'id');
+            if ($check[0]['id']) {
+                Log::getLog()->warn("Operation was already imported with id: ".$check[0]['id']);
+            } elseif ($this->callOperationsSP($row)) {
+                $operationsCounter++;
+            }
         }
 
         if ($mccCounter) Log::getLog()->info($mccCounter. " new MCC were inserted.");
         if ($curCounter) Log::getLog()->info($curCounter. " new currencies were inserted.");
         if ($descCounter) Log::getLog()->info($descCounter. " new descriptions were inserted.");
         if ($cardsCounter) Log::getLog()->info($cardsCounter. " new cards were inserted.");
-        Log::getLog()->info($operationsCounter. " operation(s) were inserted.");
+        if ($operationsCounter) Log::getLog()->info($operationsCounter. " operation(s) were inserted.");
 
     }
 
