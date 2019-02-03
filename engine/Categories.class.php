@@ -14,7 +14,9 @@ class Categories
 
     public function getMccList()
     {
-        return json_encode(Database::getInstance()->getColumns('*', '[merchant_codes]'));
+        $result = Database::getInstance()->getColumns('*', '[merchant_codes]');
+        Log::getLog()->trace($result);
+        return json_encode($result);
     }
 
     public function updateMccCat($mccId, $newMccCatId)

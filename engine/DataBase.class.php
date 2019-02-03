@@ -64,12 +64,12 @@ class Database extends PDO
         return $this->select('SELECT '.$columns.' FROM [dbo].'.$table);
     }
 
-    public function getColumnsSingleWhere($columns, $table, $where, $condition)
+    public function getColumnsWhereSingle($columns, $table, $where, $condition)
     {
         return $this->select("SELECT ".$columns." FROM [dbo].".$table." WHERE ".$where." = ('".$condition."')");
     }
 
-    public function getColumnsWhere($columns, $table, $conditions)
+    public function getColumnsWhereMultiple($columns, $table, $conditions)
     {
         $counter = 0;
         $where = "";

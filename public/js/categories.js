@@ -15,6 +15,7 @@ $(document).ready(function () {
 });
 
 function renderMccTable(data) {
+    console.log(data);
     mccArray = data;
     for (var y = 0; y < mccArray.length; y++) {
         $(".comparisonBlockMccCats").append("<div class='comparisonBlockMcc' id='mcc_" + mccArray[y].id + "'>" + mccArray[y].name + "</div>" + renderMccCatsForm(mccArray[y].id_operations_categories, mccArray[y].id));
