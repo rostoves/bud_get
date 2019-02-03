@@ -96,10 +96,10 @@ function importFile() {
                             $( $( "#tr_" + i) ).append( "<input type='text'>" );
                             break;
                         case 14:
-                            $( $( "#tr_" + i) ).append( "<button class='splitButton' id='s" + i + "'>Разделить</button>" );
+                            $( $( "#tr_" + i) ).append( "<button class='splitImportRowButton' id='s" + i + "'>Разделить</button>" );
                             break;
                         case 15:
-                            $( $( "#tr_" + i) ).append( "<button class='deleteButton' id='d" + i + "'>Удалить</button>" );
+                            $( $( "#tr_" + i) ).append( "<button class='deleteImportRowButton' id='d" + i + "'>Удалить</button>" );
                             break;
                         default:
                             $( $( "#tr_" + i) ).append( "<span>" + parsedCsv[i][j] + "</span>" );
@@ -110,17 +110,17 @@ function importFile() {
                 break;
         }
     }
-    $('.splitButton').on('click', rowInsertAfter);
-    $('.deleteButton').on('click', rowDelete);
+    $('.splitImportRowButton').on('click', rowInsertAfter);
+    $('.deleteImportRowButton').on('click', rowDelete);
     autocompleteCategories();
-    changeImportButtons();
+    changeImportButtonsForExport();
 }
 
 function markNewCategory(_category, _selector) {
     if (mccArray.indexOf(_category) == -1 ) {
-        $(_selector).addClass("badge-warning");
+        $(_selector).addClass("badge-info");
     } else {
-        $(_selector).removeClass("badge-warning");
+        $(_selector).removeClass("badge-info");
     }
 }
 
@@ -130,9 +130,16 @@ function autocompleteCategories() {
     });
 }
 
-function changeImportButtons() {
+function changeImportButtonsForExport() {
     $('.importButtonForm').html("<input type='submit' class='exportTableButton' value='Импорт операций'>");
     $('.exportTableButton').on('click', collectImportArray);
+}
+
+function changeImportButtonsForFile() {
+    $('.importButtonForm').html("");
+    $('#topImportButtonForm').html('<input type="file" class="form-control-file importCsvFileInput" id="importCsvFileInput"><input type="submit" id="loadFileButton" value="Загрузить файл">');
+    $('#importCsvFileInput').on('change', parseFile);
+    $('#loadFileButton').on('click', importFile);
 }
 
 function rowInsertAfter() {
@@ -149,15 +156,15 @@ function rowInsertAfter() {
     var desc = "<input value='" + parsedCsv[row][11] + "'>";
     var bonuses = "<input value='0,00'>";
     var comment = "<input type='text'>";
-    var deleteButton = "<button class='deleteButton' id='d" + id + "'>Удалить</button>";
+    var deleteImportRowButton = "<button class='deleteImportRowButton' id='d" + id + "'>Удалить</button>";
     $( $( "#tr_" + row) ).after(
         "<div class='importTableRow' id='tr_" + id + "'>"
-        + date + card + status + operation_sum + operation_cur + bargain_sum + bargain_cur + category + desc + bonuses + comment + deleteButton +
+        + date + card + status + operation_sum + operation_cur + bargain_sum + bargain_cur + category + desc + bonuses + comment + deleteImportRowButton +
         "</div>"
     );
     autocompleteCategories();
     markNewCategory(parsedCsv[row][9], "#ic_" + id);
-    $('.deleteButton').on('click', rowDelete);
+    $('.deleteImportRowButton').on('click', rowDelete);
 }
 
 function rowDelete() {
@@ -181,21 +188,47 @@ function collectImportArray() {
                     break;
             }
         }
+        arrayOfThisRow.push(this.id);
 
         importTableArray.push(arrayOfThisRow);
     });
 
     console.log(importTableArray);
 
+    importTableAndGetResults(function () {
+        renderResultsTable(this);
+    })
+}
+
+function importTableAndGetResults(callback) {
     $.ajax({
         url: "/",
         type: "POST",
+        dataType: "json",
         data: {
             action: 'import/importTable',
             table: importTableArray
         },
-        complete: function (data) {
-            // console.log(data);
+        success: function (data) {
+            console.log(data);
+            callback.call(data)
         }
     });
+}
+
+function renderResultsTable(arr) {
+    arr.importedOperations.forEach(function(item, i, arr) {
+        $("#"+item).remove();
+    });
+    if (arr.alreadyImportedOperations.length < 1 && arr.notImportedOperations.length < 1) {
+        $( ".importTableHeader").remove();
+        changeImportButtonsForFile();
+    } else {
+        arr.alreadyImportedOperations.forEach(function(item, i, arr) {
+            $("#"+item).addClass("badge-warning");
+        });
+        arr.notImportedOperations.forEach(function(item, i, arr) {
+            $("#"+item).addClass("badge-danger");
+        });
+    }
 }

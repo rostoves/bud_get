@@ -4,7 +4,9 @@ class Import
 {
     public function getMccList()
     {
-        return json_encode(Database::getInstance()->getColumn('[name]', '[merchant_codes]'));
+        $result = Database::getInstance()->getColumn('[name]', '[merchant_codes]');
+        Log::getLog()->trace($result);
+        return json_encode($result);
     }
 
 
@@ -21,16 +23,25 @@ class Import
         $descCounter = $this->mergeNewData($desc, $data, 8, '[description]', '[descriptions]');
         $cardsCounter = $this->mergeNewData($cards, $data, 1, '[number]', '[cards]');
         $operationsCounter = '';
+        $resultOperations['alreadyImportedOperations'] = [];
+        $resultOperations['importedOperations'] = [];
+        $resultOperations['notImportedOperations'] = [];
 
         foreach ($data as $row) {
             $params = "'".$row[0]."','".$row[7]."','".$row[5]."'";
             $check = Database::getInstance()->callScalarFunc('[check_operation_exist]',$params, 'id');
             if ($check[0]['id']) {
-                Log::getLog()->warn("Operation was already imported with id: ".$check[0]['id']);
+                array_push($resultOperations['alreadyImportedOperations'], $row[11]);
+                Log::getLog()->warn("Operation ".$row[11]." was already imported with id: ".$check[0]['id']);
             } elseif ($this->callOperationsSP($row)) {
+                array_push($resultOperations['importedOperations'], $row[11]);
                 $operationsCounter++;
+            } else {
+                array_push($resultOperations['notImportedOperations'], $row[11]);
             }
         }
+
+        Log::getLog()->trace("Results of import operations: ".print_r($resultOperations, 1));
 
         if ($mccCounter) Log::getLog()->info($mccCounter. " new MCC were inserted.");
         if ($curCounter) Log::getLog()->info($curCounter. " new currencies were inserted.");
@@ -38,16 +49,17 @@ class Import
         if ($cardsCounter) Log::getLog()->info($cardsCounter. " new cards were inserted.");
         if ($operationsCounter) Log::getLog()->info($operationsCounter. " operation(s) were inserted.");
 
+        return json_encode($resultOperations);
     }
 
     private function callOperationsSP($params)
     {
         Log::getLog()->trace("Inserting new operation: ".print_r($params, 1));
-        $result = Database::getInstance()->executeSP('[source_data_import]', ':operation_date,:card,:status,:operation_sum,:operation_cur,:bargain_sum,:bargain_cur,:category,:description,:cashback,:comment', $params);
+        $result = Database::getInstance()->executeSP('[source_data_import]', ':operation_date,:card,:status,:operation_sum,:operation_cur,:bargain_sum,:bargain_cur,:category,:description,:cashback,:comment,:rowId', $params);
         if ($result) {
-            Log::getLog()->trace("Operation was successfully inserted. Date: ".$params[0]." Sum: ".$params[5]." Category: ".$params[8]);
+            Log::getLog()->trace("Operation was successfully inserted. ID: ".$params[11]." Date: ".$params[0]." Sum: ".$params[5]." Category: ".$params[8]);
         } else {
-            Log::getLog()->error("Operation wasn't inserted. Date: ".$params[0]." Sum: ".$params[5]." Category: ".$params[8]);
+            Log::getLog()->error("Operation wasn't inserted. ID: ".$params[11]." Date: ".$params[0]." Sum: ".$params[5]." Category: ".$params[8]);
         }
         return $result;
     }
