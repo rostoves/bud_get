@@ -28,7 +28,7 @@ class Import
         $resultOperations['notImportedOperations'] = [];
 
         foreach ($data as $row) {
-            $params = "'".$row[0]."','".$row[7]."','".$row[5]."'";
+            $params = "'".$row[0]."','".$row[8]."','".$row[5]."'";
             $check = Database::getInstance()->callScalarFunc('[check_operation_exist]',$params, 'id');
             if ($check[0]['id']) {
                 array_push($resultOperations['alreadyImportedOperations'], $row[11]);
