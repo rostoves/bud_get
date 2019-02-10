@@ -15,3 +15,17 @@ function loadData(_action, callback) {
         }
     });
 }
+
+function sendPOST(_action) {
+    $.ajax({
+        url: "/",
+        type: "POST",
+        dataType: "json",
+        data: {
+            action: _action
+        },
+        success: function (data) {
+
+        }
+    });
+}

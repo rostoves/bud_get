@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Plans{% endblock %}
+
+{% block scripts %}
+    <script src="/js/plans.js"></script>
+{% endblock %}
+
+{% block styles %}{% endblock %}
+
+{% block main %}
+<div class="form-group plansButtonForm">
+    <input type="submit" id="updateRegularsButton" value="Обновить плановые расходы">
+</div>
+
+{{ include('op_list_table.html') }}
+
+{% endblock %}

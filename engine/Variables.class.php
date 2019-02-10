@@ -24,6 +24,10 @@ class Variables {
                     "link_title" => "Operations List"
                 ],
                 [
+                    "href" => "/plans/",
+                    "link_title" => "Plans"
+                ],
+                [
                     "href" => "/import/",
                     "link_title" => "Import"
                 ],
@@ -40,6 +44,9 @@ class Variables {
             case "oplist":
                 $vars['op_list_table'] = OperationList::getOperationsList();
                 break;
+            case "plans":
+                $vars['op_list_table'] = Plans::getPlansList();
+                break;
             case "import":
                 break;
             case "categories":
@@ -51,6 +58,7 @@ class Variables {
 
     public static function switchAction($action)
     {
+        Log::getLog()->debug("Processing POST request: ".$action);
         switch($action) {
             case 'import/getMCC':
                 $import = new Import;
@@ -81,6 +89,9 @@ class Variables {
             case 'categories/updateCatType':
                 $cats = new Categories;
                 $cats->updateCatType($_POST['catId'], $_POST['newCatTypeId']);
+                break;
+            case 'plans/updateRegulars':
+                Plans::updateRegularPlans();
                 break;
         }
     }
