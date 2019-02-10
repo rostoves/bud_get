@@ -4,12 +4,16 @@ class Categories
 {
     public function getCategoriesList()
     {
-        return json_encode(Database::getInstance()->getColumns('*','[operations_categories]'));
+        $result = Database::getInstance()->getColumns('*','[operations_categories]');
+        Log::getLog()->trace($result);
+        return json_encode($result);
     }
 
     public function getTypesList()
     {
-        return json_encode(Database::getInstance()->getColumns('*','[operations_types]'));
+        $result = Database::getInstance()->getColumns('*','[operations_types]');
+        Log::getLog()->trace($result);
+        return json_encode($result);
     }
 
     public function getMccList()
