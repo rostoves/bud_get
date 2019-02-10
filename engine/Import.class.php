@@ -9,8 +9,6 @@ class Import
         return json_encode($result);
     }
 
-
-
     public function insertOperationsTable($data) {
         Log::getLog()->trace("Get array for operations insert: ".print_r($data, 1));
         $mcc = Database::getInstance()->getColumn('[name]', '[merchant_codes]');
@@ -33,7 +31,7 @@ class Import
             if ($check[0]['id']) {
                 array_push($resultOperations['alreadyImportedOperations'], $row[11]);
                 Log::getLog()->warn("Operation ".$row[11]." was already imported with id: ".$check[0]['id']);
-            } elseif ($this->callOperationsSP($row)) {
+            } elseif (InsertOperations::callOperationsSP($row)) {
                 array_push($resultOperations['importedOperations'], $row[11]);
                 $operationsCounter++;
             } else {
@@ -50,18 +48,6 @@ class Import
         if ($operationsCounter) Log::getLog()->info($operationsCounter. " operation(s) were inserted.");
 
         return json_encode($resultOperations);
-    }
-
-    private function callOperationsSP($params)
-    {
-        Log::getLog()->trace("Inserting new operation: ".print_r($params, 1));
-        $result = Database::getInstance()->executeSP('[source_data_import]', ':operation_date,:card,:status,:operation_sum,:operation_cur,:bargain_sum,:bargain_cur,:category,:description,:cashback,:comment,:rowId', $params);
-        if ($result) {
-            Log::getLog()->trace("Operation was successfully inserted. ID: ".$params[11]." Date: ".$params[0]." Sum: ".$params[5]." Category: ".$params[8]);
-        } else {
-            Log::getLog()->error("Operation wasn't inserted. ID: ".$params[11]." Date: ".$params[0]." Sum: ".$params[5]." Category: ".$params[8]);
-        }
-        return $result;
     }
 
     private function mergeNewData($oldData, $newData, $index, $column, $table)
