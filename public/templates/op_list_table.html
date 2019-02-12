@@ -50,7 +50,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteOperationModalLabel">Delete operation</h5>
+                <h5 class="modal-title" id="deleteOperationModalLabel">Deleting operation</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -61,6 +61,60 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
                 <button type="button" class="btn btn-danger deleteOperationModalButton" id="deleteOperationModalButton" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addOperationModal" tabindex="-1" role="dialog" aria-labelledby="addOperationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addOperationModalLabel">Adding operation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label for="addOperationDate" class="col-sm-4 col-form-label">Date</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="date" id="addOperationDate">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="addOperationSum" class="col-sm-4 col-form-label">Sum</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="number" placeholder="Sum" id="addOperationSum">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="addOperationMcc" class="col-sm-4 col-form-label">MCC</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="addOperationMcc">
+                            {% for row in mcc_list %}
+                            <option value="{{ row.name }}">{{ row.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="addOperationDesc" class="col-sm-4 col-form-label">Description</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" placeholder="Description" id="addOperationDesc">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="addOperationComment" class="col-sm-4 col-form-label">Comment</label>
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" placeholder="Comment" id="addOperationComment">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
+                <button type="button" class="btn btn-success addOperationModalButton" id="addOperationModalButton" data-dismiss="modal">Add</button>
             </div>
         </div>
     </div>

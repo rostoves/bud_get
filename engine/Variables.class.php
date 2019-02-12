@@ -46,6 +46,7 @@ class Variables {
                 break;
             case "plans":
                 $vars['op_list_table'] = Plans::getPlansList();
+                $vars['mcc_list'] = Plans::getMccList();
                 break;
             case "import":
                 break;
@@ -65,8 +66,7 @@ class Variables {
                 echo $import->getMccList();
                 break;
             case 'import/importTable':
-                $import = new Import;
-                $json = $import->insertOperationsTable($_POST['table']);
+                $json = Import::insertOperationsTable($_POST['data']);
                 Log::getLog()->trace("Sended JSON: ".$json);
                 echo $json;
                 break;
@@ -92,6 +92,9 @@ class Variables {
                 break;
             case 'plans/updateRegulars':
                 Plans::updateRegularPlans();
+                break;
+            case 'plans/addOperation':
+                Import::insertOperationsTable($_POST['data']);
                 break;
         }
     }

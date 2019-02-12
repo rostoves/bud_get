@@ -4,11 +4,18 @@ class Plans
 {
     public static function getPlansList()
     {
-        $conditions = ['[status]' => ['=','\'PLAN\'']];
-        $planslist =  Database::getInstance()->getColumnsWhereMultiple('TOP (1000) *','[operations_list]', $conditions,' ORDER BY [operation_date] DESC');
+        $conditions = ['[status]' => ['=','\'PLAN\''], '[type]' => ['!=','\'Regular\'']];
+        $planslist =  Database::getInstance()->getColumnsWhereMultiple('TOP (500) *','[operations_list]', $conditions,' ORDER BY [operation_date] DESC');
         Log::getLog()->info("Returned plans list: " . count($planslist) . " rows");
         Log::getLog()->trace("Full plans list data: ". print_r($planslist,1));
         return $planslist;
+    }
+
+    public static function getMccList()
+    {
+        $result = Database::getInstance()->getColumnsWhereSingle('[name]', '[merchant_codes]', '[id_operations_categories]', 'in', '(select [id] from [operations_categories] where [id_operations_types] not in (1, 2))');
+        Log::getLog()->trace($result);
+        return $result;
     }
 
     public static function updateRegularPlans()

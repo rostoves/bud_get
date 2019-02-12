@@ -207,7 +207,7 @@ function importTableAndGetResults(callback) {
         dataType: "json",
         data: {
             action: 'import/importTable',
-            table: importTableArray
+            data: importTableArray
         },
         success: function (data) {
             console.log(data);

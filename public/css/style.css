@@ -6,10 +6,13 @@
     margin-bottom: 1px;
     display: grid;
     grid-gap: 2px;
-    grid-template-columns: 70px 230px 80px 140px 70px 450px 140px 140px 140px 200px 80px;
+    grid-template-columns: 70px 210px 80px 130px 70px 450px 140px 160px 140px 200px 80px;
     text-align: center;
 }
 
+.plansButtonForm {
+    margin: 10px auto auto 50px;
+}
 
 .importButtonForm,
 .importTable {

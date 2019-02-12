@@ -16,16 +16,17 @@ function loadData(_action, callback) {
     });
 }
 
-function sendPOST(_action) {
+function sendPOST(_action, _data = undefined) {
     $.ajax({
         url: "/",
         type: "POST",
         dataType: "json",
         data: {
-            action: _action
+            action: _action,
+            data: _data
         },
         success: function (data) {
-
+            console.log(data)
         }
     });
 }

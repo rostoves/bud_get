@@ -3,6 +3,7 @@
 {% block title %}Plans{% endblock %}
 
 {% block scripts %}
+    <script src="/js/jquery-dateformat.min.js"></script>
     <script src="/js/plans.js"></script>
 {% endblock %}
 
@@ -11,6 +12,7 @@
 {% block main %}
 <div class="form-group plansButtonForm">
     <input type="submit" id="updateRegularsButton" value="Обновить плановые расходы">
+    <button type="button" class="deleteOperationButton" id="addPlanButton" data-toggle="modal" data-target="#addOperationModal">Добавить операцию</button>
 </div>
 
 {{ include('op_list_table.html') }}

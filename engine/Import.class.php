@@ -9,17 +9,17 @@ class Import
         return json_encode($result);
     }
 
-    public function insertOperationsTable($data) {
+    public static function insertOperationsTable($data) {
         Log::getLog()->trace("Get array for operations insert: ".print_r($data, 1));
         $mcc = Database::getInstance()->getColumn('[name]', '[merchant_codes]');
         $cur = Database::getInstance()->getColumn('[code]', '[currencies]');
         $desc = Database::getInstance()->getColumn('[description]', '[descriptions]');
         $cards = Database::getInstance()->getColumn('[number]', '[cards]');
 
-        $mccCounter = $this->mergeNewData($mcc, $data, 7, '[name]', '[merchant_codes]');
-        $curCounter = $this->mergeNewData($cur, $data, 4, '[code]', '[currencies]');
-        $descCounter = $this->mergeNewData($desc, $data, 8, '[description]', '[descriptions]');
-        $cardsCounter = $this->mergeNewData($cards, $data, 1, '[number]', '[cards]');
+        $mccCounter = self::mergeNewData($mcc, $data, 7, '[name]', '[merchant_codes]');
+        $curCounter = self::mergeNewData($cur, $data, 4, '[code]', '[currencies]');
+        $descCounter = self::mergeNewData($desc, $data, 8, '[description]', '[descriptions]');
+        $cardsCounter = self::mergeNewData($cards, $data, 1, '[number]', '[cards]');
         $operationsCounter = '';
         $resultOperations['alreadyImportedOperations'] = [];
         $resultOperations['importedOperations'] = [];
@@ -50,7 +50,7 @@ class Import
         return json_encode($resultOperations);
     }
 
-    private function mergeNewData($oldData, $newData, $index, $column, $table)
+    private static function mergeNewData($oldData, $newData, $index, $column, $table)
     {
         $counter = '';
         for ($i = 0; $i < count($newData); $i++) {
