@@ -13,11 +13,20 @@ class Plans
 
     public static function updateRegularPlans()
     {
-        $conditions = ['[type]' => ['=','\'Regular\''], '[operation_date]' => ['>', 'GetDATE() - 30']];
-        $regulars =  Database::getInstance()->getColumnsWhereMultiple('[mcc], SUM([bargain_sum])/30 [bargain_sum]','[operations_list]', $conditions, 'GROUP BY [mcc]');
-        Log::getLog()->TRACE("Got average sums for regular categories operations: " . print_r($regulars, 1));
+        Database::getInstance()->query("DELETE FROM [dbo].[operations] WHERE [id_description] = (2998) AND [operation_date] < ('".date('Y-m-j', strtotime("+1 day"))."')");
 
-        $dates = self::formDatesList(date('Y-m-j', strtotime("+1 day")), date('Y-m-j', strtotime("+1 year")));
+        $conditions_reg = ['[type]' => ['=','\'Regular\''], '[operation_date]' => ['>', 'GetDATE() - 40'], '[description]' => ['!=', '\'Плановый регулярный расход\'']];
+        $regulars =  Database::getInstance()->getColumnsWhereMultiple('[mcc], SUM([bargain_sum])/40 [bargain_sum]','[operations_list]', $conditions_reg, 'GROUP BY [mcc]');
+        Log::getLog()->debug("Got average sums for regular categories operations: " . print_r($regulars, 1));
+
+        foreach ($regulars as $mcc) {
+            Database::getInstance()->query("UPDATE [dbo].[operations_list] SET [bargain_sum] = ".$mcc['bargain_sum']." WHERE [description] = ('Плановый регулярный расход') AND [mcc] = '".$mcc['mcc']."' AND [operation_date] > ('".date('Y-m-j')."')");
+        }
+
+        $lastplandate = Database::getInstance()->getColumnsWhereSingle('TOP (1) [operation_date]', '[operations_list]', '[description]', '=', '\'Плановый регулярный расход\'', ' ORDER BY [operation_date] DESC');
+        Log::getLog()->debug("Latest date with planned operations: ".$lastplandate[0]['operation_date']);
+        $dates = self::formDatesList(date('Y-m-j', strtotime($lastplandate[0]['operation_date']."+1 day")), date('Y-m-j', strtotime("+1 year")));
+        Log::getLog()->debug("New period for planning: : ".print_r($dates,1));
 
         foreach ($dates as $date) {
             foreach ($regulars as $value) {
@@ -27,11 +36,9 @@ class Plans
         }
     }
 
-    private static function formDatesList($_from, $_to)
+    private static function formDatesList($from, $to)
     {
-        $from = new DateTime($_from);
-        $to   = new DateTime($_to);
-        $period = new DatePeriod($from, new DateInterval('P1D'), $to);
+        $period = new DatePeriod(new DateTime($from), new DateInterval('P1D'), new DateTime($to));
         return array_map(
             function($item){return $item->format('d.m.Y');},
             iterator_to_array($period)

@@ -70,7 +70,7 @@ class Database extends PDO
 
     public function getColumnsWhereSingle($columns, $table, $where, $symbol, $condition, $order = '')
     {
-        return $this->select("SELECT ".$columns." FROM [dbo].".$table." WHERE ".$where . $symbol." ('".$condition."')".$order);
+        return $this->select("SELECT ".$columns." FROM [dbo].".$table." WHERE ".$where . $symbol." (".$condition.")".$order);
     }
 
     public function getColumnsWhereMultiple($columns, $table, $conditions, $order = '')
