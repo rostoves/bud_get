@@ -10,7 +10,8 @@
     text-align: center;
 }
 
-.plansButtonForm {
+.plansButtonForm,
+.oplistButtonForm {
     margin: 10px auto auto 50px;
 }
 

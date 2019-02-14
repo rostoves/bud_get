@@ -3,11 +3,17 @@
 {% block title %}Operations List{% endblock %}
 
 {% block scripts %}
+    <script src="/js/libs/jquery-dateformat.min.js"></script>
+    <script src="/js/op_list_table.js"></script>
     <script src="/js/oplist.js"></script>
 {% endblock %}
 
 {% block styles %}{% endblock %}
 
 {% block main %}
+<div class="form-group oplistButtonForm">
+    <button type="button" class="addOperationButton" id="addOperationButton" data-toggle="modal" data-target="#addOperationModal">Добавить операцию</button>
+</div>
+
 {{ include('op_list_table.html') }}
 {% endblock %}

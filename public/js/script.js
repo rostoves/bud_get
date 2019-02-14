@@ -16,7 +16,7 @@ function loadData(_action, callback) {
     });
 }
 
-function sendPOST(_action, _data = undefined) {
+function sendPOST(_action, _data = undefined, callback = undefined) {
     $.ajax({
         url: "/",
         type: "POST",
@@ -26,7 +26,8 @@ function sendPOST(_action, _data = undefined) {
             data: _data
         },
         success: function (data) {
-            console.log(data)
+            console.log(data);
+            callback.call(data);
         }
     });
 }

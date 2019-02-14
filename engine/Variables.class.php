@@ -43,6 +43,7 @@ class Variables {
                 break;
             case "oplist":
                 $vars['op_list_table'] = OperationList::getOperationsList();
+                $vars['mcc_list'] = OperationList::getMccList();
                 break;
             case "plans":
                 $vars['op_list_table'] = Plans::getPlansList();
@@ -93,8 +94,11 @@ class Variables {
             case 'plans/updateRegulars':
                 Plans::updateRegularPlans();
                 break;
-            case 'plans/addOperation':
+            case 'op_list_table/addOperation':
                 Import::insertOperationsTable($_POST['data']);
+                break;
+            case 'op_list_table/deleteOperation':
+                OperationList::deleteOperation($_POST['data']);
                 break;
         }
     }

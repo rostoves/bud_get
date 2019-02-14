@@ -195,24 +195,8 @@ function collectImportArray() {
 
     console.log(importTableArray);
 
-    importTableAndGetResults(function () {
+    sendPOST('import/importTable', importTableArray, function () {
         renderResultsTable(this);
-    })
-}
-
-function importTableAndGetResults(callback) {
-    $.ajax({
-        url: "/",
-        type: "POST",
-        dataType: "json",
-        data: {
-            action: 'import/importTable',
-            data: importTableArray
-        },
-        success: function (data) {
-            console.log(data);
-            callback.call(data)
-        }
     });
 }
 
