@@ -1,86 +1,50 @@
-var typesArray = [];
-var catsArray = [];
-var mccArray = [];
-
 $(document).ready(function () {
-    loadData('categories/getTypes', function () {
-        typesArray = this;
-    });
-    loadData('categories/getCats', function () {
-        renderCatsTable(this);
-    });
-    loadData('categories/getMCC', function () {
-        renderMccTable(this);
-    });
+    $(".comparisonBlockCategorySelect").on('change', sendComparisonMccUpdate);
+    $(".comparisonBlockTypeSelect").on('change', sendComparisonCatUpdate);
+    $('.deleteMccButton').on('click', mccDelete);
+    $('#deleteMccModalButton').on('click', deleteMccModalAnswer);
+    $('.deleteCatButton').on('click', catDelete);
+    $('#deleteCatModalButton').on('click', deleteCatModalAnswer);
+    $('.operationListMccName').on('change', sendMccNameUpdate);
+    $('.operationListCatName').on('change', sendCatNameUpdate);
 });
 
-function renderMccTable(data) {
-    console.log(data);
-    mccArray = data;
-    for (var y = 0; y < mccArray.length; y++) {
-        $(".comparisonBlockMccCats").append("<div class='comparisonBlockMcc' id='mcc_" + mccArray[y].id + "'>" + mccArray[y].name + "</div>" + renderMccCatsForm(mccArray[y].id_operations_categories, mccArray[y].id));
-    }
-    $(".comparisonBlockCategorySelect").on('change', sendComparisonMccUpdate);
-}
-
-function renderCatsTable(data) {
-    catsArray = data;
-    for (var i = 0; i < catsArray.length; i++) {
-        $(".comparisonBlockCatsTypes").append("<div class='comparisonBlockCats' id='cat_" + catsArray[i].id + "'>" + catsArray[i].name + "</div>" + renderCatsTypesForm(catsArray[i].id_operations_types, catsArray[i].id));
-    }
-    $(".comparisonBlockTypeSelect").on('change', sendComparisonCatUpdate);
-}
-
-function renderMccCatsForm(defaultCatId, mccId) {
-    var optionCatsList = '';
-    for (var i = 0; i < catsArray.length; i++) {
-        if (catsArray[i].id == defaultCatId) {
-            optionCatsList += "<option selected value='" + catsArray[i].id + "'>" + catsArray[i].name + "</option>";
-        } else {
-            optionCatsList += "<option value='" + catsArray[i].id + "'>" + catsArray[i].name + "</option>";
-        }
-    }
-
-    return "<select class='comparisonBlockCategorySelect' id='mcc_cat_" + mccId + "'>" + optionCatsList + "</select>";
-}
-
-function renderCatsTypesForm(defaultTypeId, catId) {
-    var optionTypesList = '';
-    for (var i = 0; i < typesArray.length; i++) {
-        if (typesArray[i].id == defaultTypeId) {
-            optionTypesList += "<option selected value='" + typesArray[i].id + "'>" + typesArray[i].name + "</option>";
-        } else {
-            optionTypesList += "<option value='" + typesArray[i].id + "'>" + typesArray[i].name + "</option>";
-        }
-    }
-
-    return "<select class='comparisonBlockTypeSelect' id='cat_type_" + catId + "'>" + optionTypesList + "</select>";
-}
-
 function sendComparisonMccUpdate() {
-    $.ajax({
-        url: "/",
-        type: "POST",
-        dataType: "json",
-        data: {
-            action: 'categories/updateMccCat',
-            mccId: this.id.slice(8),
-            newMccCatId: this.value
-        },
-        success: function (data) {}
-    });
+    sendFieldUpdate('categories/updateMccCat', this.id.slice(8), '[id_operations_categories]', this.value);
 }
 
 function sendComparisonCatUpdate() {
-    $.ajax({
-        url: "/",
-        type: "POST",
-        dataType: "json",
-        data: {
-            action: 'categories/updateCatType',
-            catId: this.id.slice(9),
-            newCatTypeId: this.value
-        },
-        success: function (data) {}
-    });
+    sendFieldUpdate('categories/updateCatType', this.id.slice(9), '[id_operations_types]', this.value);
+}
+
+function mccDelete() {
+    $('#deleteMccModalButton').attr('id',   'm' + this.id);
+}
+
+function deleteMccModalAnswer() {
+    var mcc = this.id.slice(2);
+    console.log("Mcc " + mcc + " was deleted.");
+    $("#mcc_" + mcc).remove();
+    $(this).attr('id', 'deleteMccModalButton');
+    sendFieldUpdate('categories/deleteMcc', mcc, '', $('#newMccSelect')[0].value);
+}
+
+function catDelete() {
+    $('#deleteCatModalButton').attr('id',   'm' + this.id);
+}
+
+function deleteCatModalAnswer() {
+    var cat = this.id.slice(2);
+    console.log("Category " + cat + " was deleted.");
+    $("#cat_" + cat).remove();
+    $(this).attr('id', 'deleteCatModalButton');
+    sendFieldUpdate('categories/deleteCat', cat, '', $('#newCatSelect')[0].value);
+}
+
+function sendMccNameUpdate() {
+    sendFieldUpdate('categories/updateNameColumn', this.id.slice(9), '[merchant_codes]', '\''+this.value+'\'');
+}
+
+function sendCatNameUpdate() {
+    sendFieldUpdate('categories/updateNameColumn', this.id.slice(9), '[operations_categories]', '\''+this.value+'\'');
 }

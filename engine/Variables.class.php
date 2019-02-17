@@ -44,14 +44,19 @@ class Variables {
             case "oplist":
                 $vars['op_list_table'] = OperationList::getOperationsList();
                 $vars['mcc_list'] = OperationList::getMccList();
+                $vars['cards_list'] = OperationList::getCardList();
                 break;
             case "plans":
                 $vars['op_list_table'] = Plans::getPlansList();
                 $vars['mcc_list'] = Plans::getMccList();
+                $vars['cards_list'] = OperationList::getCardList();
                 break;
             case "import":
                 break;
             case "categories":
+                $vars['types_list'] = Categories::getTypesList();
+                $vars['mcc_list'] = Categories::getMccList();
+                $vars['cats_list'] = Categories::getCategoriesList();
                 break;
         }
 
@@ -71,25 +76,20 @@ class Variables {
                 Log::getLog()->trace("Sended JSON: ".$json);
                 echo $json;
                 break;
-            case 'categories/getTypes':
-                $cats = new Categories;
-                echo $cats->getTypesList();
-                break;
-            case 'categories/getCats':
-                $cats = new Categories;
-                echo $cats->getCategoriesList();
-                break;
-            case 'categories/getMCC':
-                $cats = new Categories;
-                echo $cats->getMccList();
-                break;
             case 'categories/updateMccCat':
-                $cats = new Categories;
-                $cats->updateMccCat($_POST['mccId'], $_POST['newMccCatId']);
+                Categories::updateMccCat($_POST['rowId'], $_POST['field'], $_POST['newValue']);
                 break;
             case 'categories/updateCatType':
-                $cats = new Categories;
-                $cats->updateCatType($_POST['catId'], $_POST['newCatTypeId']);
+                Categories::updateCatType($_POST['rowId'], $_POST['field'], $_POST['newValue']);
+                break;
+            case 'categories/deleteMcc':
+                Categories::deleteMcc($_POST['rowId'], $_POST['newValue']);
+                break;
+            case 'categories/deleteCat':
+                Categories::deleteCat($_POST['rowId'], $_POST['newValue']);
+                break;
+            case 'categories/updateNameColumn':
+                Categories::updateNameColumn($_POST['rowId'], $_POST['field'], $_POST['newValue']);
                 break;
             case 'plans/updateRegulars':
                 Plans::updateRegularPlans();
@@ -99,6 +99,15 @@ class Variables {
                 break;
             case 'op_list_table/deleteOperation':
                 OperationList::deleteOperation($_POST['data']);
+                break;
+            case 'op_list_table/updateOperation':
+                OperationList::updateOperationColumn($_POST['rowId'], $_POST['field'], $_POST['newValue']);
+                break;
+//            case 'op_list_table/updateOperationDesc':
+//                OperationList::updateOperationColumn($_POST['rowId'], '[id_description]', $_POST['newValue']);
+//                break;
+            case 'op_list_table/getDescList':
+                echo OperationList::getDescList();
                 break;
         }
     }
