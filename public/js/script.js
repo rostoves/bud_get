@@ -31,3 +31,19 @@ function sendPOST(_action, _data = undefined, callback = undefined) {
         }
     });
 }
+
+function sendFieldUpdate(_action, _rowId, _field, _newValue) {
+    console.log(_action, _rowId, _field, _newValue);
+    $.ajax({
+        url: "/",
+        type: "POST",
+        dataType: "json",
+        data: {
+            action: _action,
+            rowId: _rowId,
+            field: _field,
+            newValue: _newValue
+        },
+        success: function (data) {}
+    });
+}

@@ -1,7 +1,27 @@
+var descArray = [];
+
 $(document).ready(function () {
     $('.deleteOperationButton').on('click', operationRowDelete);
     $('#deleteOperationModalButton').on('click', deleteModalAnswer);
+    $('.operationListMccSelect').on('change', sendOperationMccUpdate);
+    $('.operationListComment').on('change', sendOperationCommentUpdate);
+    $('.operationListDate').on('change', sendOperationDateUpdate);
+    $('.operationListSum').on('change', sendOperationSumUpdate);
+    $('.operationListCardSelect').on('change', sendOperationCardUpdate);
+
+    loadData('op_list_table/getDescList', function () {
+        descArray = this;
+        console.log(descArray);
+        autocompleteDescription();
+    });
+    // $('.operationsListDescription').on('change', sendOperationDescUpdate);
 });
+
+function autocompleteDescription() {
+    $('#addOperationDesc').autocomplete({
+        source: descArray
+    });
+}
 
 function addOperation(status) {
     var date = new Date($('#addOperationDate')[0].value);
@@ -52,3 +72,27 @@ function deleteModalAnswer() {
     $(this).attr('id', 'deleteOperationModalButton');
     sendPOST('op_list_table/deleteOperation', row);
 }
+
+function sendOperationMccUpdate() {
+    sendFieldUpdate('op_list_table/updateOperation', this.id.slice(7), '[id_mcc]', this.value);
+}
+
+function sendOperationCommentUpdate() {
+    sendFieldUpdate('op_list_table/updateOperation', this.id.slice(8), '[comment]', this.value);
+}
+
+function sendOperationDateUpdate() {
+    sendFieldUpdate('op_list_table/updateOperation', this.id.slice(5), '[operation_date]', '\''+this.value+'\'');
+}
+
+function sendOperationSumUpdate() {
+    sendFieldUpdate('op_list_table/updateOperation', this.id.slice(4), '[bargain_sum]', this.value);
+}
+
+function sendOperationCardUpdate() {
+    sendFieldUpdate('op_list_table/updateOperation', this.id.slice(5), '[id_card]', this.value);
+}
+
+// function sendOperationDescUpdate() {
+//     sendFieldUpdate('op_list_table/updateOperationDesc', this.id.slice(5), this.value);
+// }

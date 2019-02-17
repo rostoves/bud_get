@@ -13,7 +13,7 @@ class Plans
 
     public static function getMccList()
     {
-        $result = Database::getInstance()->getColumnsWhereSingle('[name]', '[merchant_codes]', '[id_operations_categories]', 'in', '(select [id] from [operations_categories] where [id_operations_types] not in (1, 2))');
+        $result = Database::getInstance()->getColumnsWhereSingle('[id], [name]', '[merchant_codes]', '[id_operations_categories]', 'in', '(select [id] from [operations_categories] where [id_operations_types] not in (1, 2))');
         Log::getLog()->trace($result);
         return $result;
     }

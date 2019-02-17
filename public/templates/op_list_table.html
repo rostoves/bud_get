@@ -11,7 +11,6 @@
             <span>Date</span>
             <span>Sum</span>
             <span>Card</span>
-            <span>Payee</span>
             <span>Description</span>
             <span>MCC</span>
             <span>Category</span>
@@ -22,21 +21,27 @@
         <span>None operations in the database with such parameters</span>
         {% endif %}
         {% for key, row in op_list_table|batch(50) %}
-        <div class="tab-pane fade {% if key < 1 %}show active{% endif %}" id="batch_{{ key }}" role="tabpanel" aria-labelledby="batch_{{ key }}_tab">
+        <div class="tab-pane fade {% if key == 0 %}show active{% endif %}" id="batch_{{ key }}" role="tabpanel" aria-labelledby="batch_{{ key }}_tab">
             {% for column in row %}
             <div class="operationsListTableRow" id="row_{{ column.id }}">
                 <span>{{ column.id }}</span>
-                <span>{{ column.operation_date }}</span>
-                <span>{{ column.bargain_sum }}</span>
-                <span>{{ column.card }}</span>
-                <span>{{ column.owner }}</span>
+                <input class="operationListDate" id="date_{{ column.id }}" value="{{ column.operation_date }}">
+                <input class="operationListSum" id="sum_{{ column.id }}" value="{{ column.bargain_sum }}">
+                <select class="operationListCardSelect" id="card_{{ column.id }}">
+                    {% for row in cards_list %}
+                    <option {% if row.id == column.card_id %}selected{% endif %} value="{{ row.id }}">{{ row.bank }} {{ row.name }} {{ row.owner }}</option>
+                    {% endfor %}
+                </select>
                 <span>{{ column.description }}</span>
-                <select>
-                    <option selected value="{{ column.mcc_id }}">{{ column.mcc }}</option>
+                <!--<input class="operationsListDescription" id="desc_{{ column.id }}" value="{{ column.description }}">-->
+                <select class="operationListMccSelect" id="select_{{ column.id }}">
+                    {% for row in mcc_list %}
+                    <option {% if row.id == column.mcc_id %}selected{% endif %} value="{{ row.id }}">{{ row.name }}</option>
+                    {% endfor %}
                 </select>
                 <span>{{ column.category }}</span>
                 <span>{{ column.type }}</span>
-                <input value="{{ column.comment }}">
+                <input class="operationListComment" id="comment_{{ column.id }}" value="{{ column.comment }}">
                 <button type="button" class="deleteOperationButton" id="d{{ column.id }}" data-toggle="modal" data-target="#deleteOperationModal">Удалить</button>
             </div>
             {% endfor %}
@@ -76,7 +81,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body ui-front">
                 <div class="form-group row">
                     <label for="addOperationDate" class="col-sm-3 col-form-label">Date</label>
                     <div class="col-sm-9">
@@ -108,7 +113,11 @@
                 <div class="form-group row">
                     <label for="addOperationCard" class="col-sm-3 col-form-label">Card</label>
                     <div class="col-sm-9">
-                        <input class="form-control" type="text" placeholder="Card" id="addOperationCard">
+                        <select class="form-control" id="addOperationCard">
+                            {% for row in cards_list %}
+                            <option value="{{ row.number }}">{{ row.bank }} {{ row.name }} {{ row.owner }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
