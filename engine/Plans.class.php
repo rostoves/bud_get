@@ -5,7 +5,7 @@ class Plans
     public static function getPlansList()
     {
         $conditions = ['[status]' => ['=','\'PLAN\''], '[type]' => ['!=','\'Regular\'']];
-        $planslist =  Database::getInstance()->getColumnsWhereMultiple('TOP (500) *','[operations_list]', $conditions,' ORDER BY [operation_date] DESC');
+        $planslist =  Database::getInstance()->getColumnsWhereMultiple('TOP (500) *','[operations_list]', $conditions,' ORDER BY [operation_date] ASC');
         Log::getLog()->info("Returned plans list: " . count($planslist) . " rows");
         Log::getLog()->trace("Full plans list data: ". print_r($planslist,1));
         return $planslist;
@@ -22,8 +22,8 @@ class Plans
     {
         Database::getInstance()->query("DELETE FROM [dbo].[operations] WHERE [id_description] = (2998) AND [operation_date] < ('".date('Y-m-j', strtotime("+1 day"))."')");
 
-        $conditions_reg = ['[type]' => ['=','\'Regular\''], '[operation_date]' => ['>', 'GetDATE() - 40'], '[description]' => ['!=', '\'Плановый регулярный расход\'']];
-        $regulars =  Database::getInstance()->getColumnsWhereMultiple('[mcc], SUM([bargain_sum])/40 [bargain_sum]','[operations_list]', $conditions_reg, 'GROUP BY [mcc]');
+        $conditions_reg = ['[type]' => ['=','\'Regular\''], '[operation_date]' => ['>', 'GetDATE() - 47'], '[description]' => ['!=', '\'Плановый регулярный расход\'']];
+        $regulars =  Database::getInstance()->getColumnsWhereMultiple('[mcc], SUM([bargain_sum])/47 [bargain_sum]','[operations_list]', $conditions_reg, 'GROUP BY [mcc]');
         Log::getLog()->debug("Got average sums for regular categories operations: " . print_r($regulars, 1));
 
         foreach ($regulars as $mcc) {

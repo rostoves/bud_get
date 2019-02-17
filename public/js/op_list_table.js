@@ -78,7 +78,7 @@ function sendOperationMccUpdate() {
 }
 
 function sendOperationCommentUpdate() {
-    sendFieldUpdate('op_list_table/updateOperation', this.id.slice(8), '[comment]', this.value);
+    sendFieldUpdate('op_list_table/updateOperation', this.id.slice(8), '[comment]', '\''+this.value+'\'');
 }
 
 function sendOperationDateUpdate() {
