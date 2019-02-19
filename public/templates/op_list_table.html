@@ -35,6 +35,7 @@
                 <span>{{ column.description }}</span>
                 <!--<input class="operationsListDescription" id="desc_{{ column.id }}" value="{{ column.description }}">-->
                 <select class="operationListMccSelect" id="select_{{ column.id }}">
+                    <option value></option>
                     {% for row in mcc_list %}
                     <option {% if row.id == column.mcc_id %}selected{% endif %} value="{{ row.id }}">{{ row.name }}</option>
                     {% endfor %}

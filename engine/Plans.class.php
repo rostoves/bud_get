@@ -20,14 +20,14 @@ class Plans
 
     public static function updateRegularPlans()
     {
-        Database::getInstance()->query("DELETE FROM [dbo].[operations] WHERE [id_description] = (2998) AND [operation_date] < ('".date('Y-m-j', strtotime("+1 day"))."')");
+        Database::getInstance()->query("DELETE FROM [dbo].[operations] WHERE [id_description] = (2998) AND [operation_date] < ('".date('Y-m-j')."')");
 
-        $conditions_reg = ['[type]' => ['=','\'Regular\''], '[operation_date]' => ['>', 'GetDATE() - 47'], '[description]' => ['!=', '\'Плановый регулярный расход\'']];
-        $regulars =  Database::getInstance()->getColumnsWhereMultiple('[mcc], SUM([bargain_sum])/47 [bargain_sum]','[operations_list]', $conditions_reg, 'GROUP BY [mcc]');
+        $conditions_reg = ['[type]' => ['=','\'Regular\''], '[operation_date]' => ['>', 'GetDATE() - DATEPART(dayofyear, GetDATE())'], '[description]' => ['!=', '\'Плановый регулярный расход\'']];
+        $regulars =  Database::getInstance()->getColumnsWhereMultiple('[mcc], SUM([bargain_sum])/DATEPART(dayofyear, GetDATE()) [bargain_sum]','[operations_list]', $conditions_reg, 'GROUP BY [mcc]');
         Log::getLog()->debug("Got average sums for regular categories operations: " . print_r($regulars, 1));
 
         foreach ($regulars as $mcc) {
-            Database::getInstance()->query("UPDATE [dbo].[operations_list] SET [bargain_sum] = ".$mcc['bargain_sum']." WHERE [description] = ('Плановый регулярный расход') AND [mcc] = '".$mcc['mcc']."' AND [operation_date] > ('".date('Y-m-j')."')");
+            Database::getInstance()->query("UPDATE [dbo].[operations_list] SET [bargain_sum] = ".$mcc['bargain_sum']." WHERE [description] = ('Плановый регулярный расход') AND [mcc] = '".$mcc['mcc']."' AND [operation_date] >= ('".date('Y-m-j')."')");
         }
 
         $lastplandate = Database::getInstance()->getColumnsWhereSingle('TOP (1) [operation_date]', '[operations_list]', '[description]', '=', '\'Плановый регулярный расход\'', ' ORDER BY [operation_date] DESC');
