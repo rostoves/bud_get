@@ -16,6 +16,7 @@
     <div class="nav flex-column nav-pills comparisonBlockMenu" role="tablist" aria-orientation="vertical">
         <a class="nav-link comparisonBlockMenuLink active" id="tab-mcc-cats" data-toggle="pill" href="#aria-mcc-cats" role="tab" aria-selected="true">MCC -> Categories</a>
         <a class="nav-link comparisonBlockMenuLink" id="tab-cats-types" data-toggle="pill" href="#aria-cats-types" role="tab" aria-selected="false">Categories -> Types</a>
+        <a class="nav-link comparisonBlockMenuLink" id="tab-desc" data-toggle="pill" href="#aria-desc" role="tab" aria-selected="false">Descriptions</a>
     </div>
     <div class="tab-content comparisonBlockContent">
         <div class="tab-pane fade show active" id="aria-mcc-cats" role="tabpanel">
@@ -45,6 +46,16 @@
                         {% endfor %}
                     </select>
                     <button type="button" class="deleteCatButton" id="d{{ column.id }}" data-toggle="modal" data-target="#deleteCatModal">Удалить</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="aria-desc" role="tabpanel">
+            <div class="comparisonBlockDescList">
+                {% for column in desc_list %}
+                <div class="comparisonBlockDesc" id="desc_{{ column.id }}">
+                    <input  class="operationListDescName" id="desc_name_{{ column.id }}" value="{{ column.description }}">
+                    <button type="button" class="deleteDescButton" id="d{{ column.id }}" data-toggle="modal" data-target="#deleteDescModal">Удалить</button>
                 </div>
                 {% endfor %}
             </div>
@@ -111,6 +122,38 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
                 <button type="button" class="btn btn-danger" id="deleteCatModalButton" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteDescModal" tabindex="-1" role="dialog" aria-labelledby="deleteDescModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteDescModalLabel">Deleting description</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you really want to delete the description?
+                <div class="form-group row">
+                    <label for="newDescSelect" class="col-sm-5 col-form-label">Choose new description</label>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="newDescSelect">
+                            <option selected value> -- choose -- </option>
+                            {% for row in desc_list %}
+                            <option value="{{ row.id }}">{{ row.description }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
+                <button type="button" class="btn btn-danger" id="deleteDescModalButton" data-dismiss="modal">Delete</button>
             </div>
         </div>
     </div>
