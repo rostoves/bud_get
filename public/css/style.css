@@ -1,6 +1,7 @@
 .operationsListTable {
     margin: 10px 50px auto 50px;
 }
+
 .operationsListTableHeader,
 .operationsListTableRow {
     margin-bottom: 1px;
@@ -10,7 +11,6 @@
     text-align: center;
 }
 
-.plansButtonForm,
 .oplistButtonForm {
     margin: 10px auto auto 50px;
 }
@@ -56,8 +56,17 @@
 }
 
 .comparisonBlockMcc,
-.comparisonBlockCats {
+.comparisonBlockCats,
+.comparisonBlockDesc {
     display: grid;
     grid-gap: 2px;
+}
+
+.comparisonBlockMcc,
+.comparisonBlockCats {
     grid-template-columns: 1fr 1fr 0.5fr;
+}
+
+.comparisonBlockDesc {
+    grid-template-columns: 2.5fr 0.5fr;
 }

@@ -2,29 +2,13 @@
 
 class Plans
 {
-    public static function getPlansList()
-    {
-        $conditions = ['[status]' => ['=','\'PLAN\''], '[type]' => ['!=','\'Regular\'']];
-        $planslist =  Database::getInstance()->getColumnsWhereMultiple('TOP (500) *','[operations_list]', $conditions,' ORDER BY [operation_date] ASC');
-        Log::getLog()->info("Returned plans list: " . count($planslist) . " rows");
-        Log::getLog()->trace("Full plans list data: ". print_r($planslist,1));
-        return $planslist;
-    }
-
-    public static function getMccList()
-    {
-        $result = Database::getInstance()->getColumnsWhereSingle('[id], [name]', '[merchant_codes]', '[id_operations_categories]', 'in', '(select [id] from [operations_categories] where [id_operations_types] not in (1, 2))');
-        Log::getLog()->trace($result);
-        return $result;
-    }
-
     public static function updateRegularPlans()
     {
         Database::getInstance()->query("DELETE FROM [dbo].[operations] WHERE [id_description] = (2998) AND [operation_date] < ('".date('Y-m-j')."')");
 
         $conditions_reg = ['[type]' => ['=','\'Regular\''], '[operation_date]' => ['>', 'GetDATE() - DATEPART(dayofyear, GetDATE())'], '[description]' => ['!=', '\'Плановый регулярный расход\'']];
         $regulars =  Database::getInstance()->getColumnsWhereMultiple('[mcc], SUM([bargain_sum])/DATEPART(dayofyear, GetDATE()) [bargain_sum]','[operations_list]', $conditions_reg, 'GROUP BY [mcc]');
-        Log::getLog()->debug("Got average sums for regular categories operations: " . print_r($regulars, 1));
+        Log::getLog()->info("Got average sums for regular categories operations: " . print_r($regulars, 1));
 
         foreach ($regulars as $mcc) {
             Database::getInstance()->query("UPDATE [dbo].[operations_list] SET [bargain_sum] = ".$mcc['bargain_sum']." WHERE [description] = ('Плановый регулярный расход') AND [mcc] = '".$mcc['mcc']."' AND [operation_date] >= ('".date('Y-m-j')."')");

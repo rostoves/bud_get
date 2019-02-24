@@ -1,7 +1,7 @@
 <div class="operationsListTable">
     <div class="nav nav-tabs" role="tablist">
         {% for key, row in op_list_table|batch(50) %}
-        <a class="nav-item nav-link {% if key < 1 %}active{% endif %}" id="batch_{{ key }}_tab" data-toggle="tab" href="#batch_{{ key }}" role="tab" aria-controls="batch_{{ key }}" aria-selected="{% if key < 1 %}true{% else %}false{% endif %}">{{ key + 1 }}</a>
+        <a class="nav-item nav-link {% if key == 0 %}active{% endif %}" id="batch_{{ key }}_tab" data-toggle="tab" href="#batch_{{ key }}" role="tab" aria-controls="batch_{{ key }}" aria-selected="{% if key == 0 %}true{% else %}false{% endif %}">{{ key + 1 }}</a>
         {% endfor %}
     </div>
     <div class="tab-content">
@@ -83,6 +83,15 @@
                 </button>
             </div>
             <div class="modal-body ui-front">
+                <div class="form-group row">
+                    <label for="addOperationStatus" class="col-sm-3 col-form-label">Date</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" id="addOperationStatus">
+                            <option value="'OK'">OK</option>
+                            <option selected value="'PLAN'">PLAN</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="form-group row">
                     <label for="addOperationDate" class="col-sm-3 col-form-label">Date</label>
                     <div class="col-sm-9">

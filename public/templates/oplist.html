@@ -4,16 +4,44 @@
 
 {% block scripts %}
     <script src="/js/libs/jquery-dateformat.min.js"></script>
-    <script src="/js/op_list_table.js"></script>
     <script src="/js/oplist.js"></script>
 {% endblock %}
 
 {% block styles %}{% endblock %}
 
 {% block main %}
-<div class="form-group oplistButtonForm">
+<div class="form-group form-inline oplistButtonForm">
+    <select class="custom-select operationListFilter" id="filter_order">
+        <option selected value="ASC">Newest</option>
+        <option value="DESC">Oldest</option>
+    </select>
+    <select multiple class="custom-select operationListFilter" id="filter_status">
+        <option selected value="status"> -- Status -- </option>
+        <option value="'OK'">OK</option>
+        <option value="'PLAN'">PLAN</option>
+    </select>
+    <select multiple class="custom-select operationListFilter" id="filter_mcc_id">
+        <option selected value="mcc_id"> -- MCC -- </option>
+        {% for row in mcc_list %}
+        <option value="{{ row.id }}">{{ row.name }}</option>
+        {% endfor %}
+    </select>
+    <select multiple class="custom-select operationListFilter" id="filter_category">
+        <option selected value="type"> -- Category -- </option>
+        {% for row in cats_list %}
+        <option value="'{{ row }}'">{{ row }}</option>
+        {% endfor %}
+    </select>
+    <select multiple class="custom-select operationListFilter" id="filter_type">
+        <option selected value="type"> -- Type -- </option>
+        {% for row in types_list %}
+        <option value="'{{ row }}'">{{ row }}</option>
+        {% endfor %}
+    </select>
     <button type="button" class="addOperationButton" id="addOperationButton" data-toggle="modal" data-target="#addOperationModal">Добавить операцию</button>
 </div>
+<div class="operationsListTableContainer">
+    {{ include('op_list_table.html') }}
+</div>
 
-{{ include('op_list_table.html') }}
 {% endblock %}

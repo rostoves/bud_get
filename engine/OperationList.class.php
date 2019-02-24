@@ -2,10 +2,16 @@
 
 class OperationList
 {
-    public static function getOperationsList()
+    public static function getOperationsList($filter = NULL, $_order = NULL)
     {
-        $conditions = ['[status]' => ['=','\'OK\'']];
-        $oplist =  Database::getInstance()->getColumnsWhereMultiple('TOP (500) *','[operations_list]', $conditions,' ORDER BY [operation_date] DESC');
+        if ($filter != NULL) {
+            $conditions = $filter;
+            $order = ' ORDER BY [operation_date] ' . $_order;
+        } else {
+            $conditions['status'] = [' =','\'OK\''];
+            $order = ' ORDER BY [operation_date] DESC';
+        }
+        $oplist =  Database::getInstance()->getColumnsWhereMultiple('TOP (500) *','[operations_list]', $conditions, $order);
         Log::getLog()->info("Returned operations list: " . count($oplist) . " rows");
         Log::getLog()->trace("Full operations list data: ". print_r($oplist,1));
         return $oplist;
@@ -30,6 +36,20 @@ class OperationList
         $result = Database::getInstance()->getColumn('[description]', '[descriptions]');
         Log::getLog()->trace($result);
         return json_encode($result);
+    }
+
+    public static function getCatsList()
+    {
+        $result = Database::getInstance()->getColumn('[name]', '[operations_categories]');
+        Log::getLog()->trace($result);
+        return $result;
+    }
+
+    public static function getTypesList()
+    {
+        $result = Database::getInstance()->getColumn('[name]', '[operations_types]');
+        Log::getLog()->trace($result);
+        return $result;
     }
 
     public static function deleteOperation($id)

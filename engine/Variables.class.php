@@ -24,10 +24,6 @@ class Variables {
                     "link_title" => "Operations List"
                 ],
                 [
-                    "href" => "/plans/",
-                    "link_title" => "Plans"
-                ],
-                [
                     "href" => "/import/",
                     "link_title" => "Import"
                 ],
@@ -42,14 +38,12 @@ class Variables {
             case "index":
                 break;
             case "oplist":
-                $vars['op_list_table'] = OperationList::getOperationsList();
+            case "op_list_table":
+                $vars['op_list_table'] = OperationList::getOperationsList($_GET['filter'], $_GET['order']);
                 $vars['mcc_list'] = OperationList::getMccList();
                 $vars['cards_list'] = OperationList::getCardList();
-                break;
-            case "plans":
-                $vars['op_list_table'] = Plans::getPlansList();
-                $vars['mcc_list'] = Plans::getMccList();
-                $vars['cards_list'] = OperationList::getCardList();
+                $vars['cats_list'] = OperationList::getCatsList();
+                $vars['types_list'] = OperationList::getTypesList();
                 break;
             case "import":
                 break;
@@ -57,6 +51,7 @@ class Variables {
                 $vars['types_list'] = Categories::getTypesList();
                 $vars['mcc_list'] = Categories::getMccList();
                 $vars['cats_list'] = Categories::getCategoriesList();
+                $vars['desc_list'] = Categories::getDescList();
                 break;
         }
 
@@ -75,6 +70,7 @@ class Variables {
                 $json = Import::insertOperationsTable($_POST['data']);
                 Log::getLog()->trace("Sended JSON: ".$json);
                 echo $json;
+                Plans::updateRegularPlans();
                 break;
             case 'categories/updateMccCat':
                 Categories::updateMccCat($_POST['rowId'], $_POST['field'], $_POST['newValue']);
@@ -88,11 +84,11 @@ class Variables {
             case 'categories/deleteCat':
                 Categories::deleteCat($_POST['rowId'], $_POST['newValue']);
                 break;
+            case 'categories/deleteDesc':
+                Categories::deleteDesc($_POST['rowId'], $_POST['newValue']);
+                break;
             case 'categories/updateNameColumn':
                 Categories::updateNameColumn($_POST['rowId'], $_POST['field'], $_POST['newValue']);
-                break;
-            case 'plans/updateRegulars':
-                Plans::updateRegularPlans();
                 break;
             case 'op_list_table/addOperation':
                 Import::insertOperationsTable($_POST['data']);
