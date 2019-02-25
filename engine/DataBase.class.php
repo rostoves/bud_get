@@ -81,20 +81,24 @@ class Database extends PDO
         foreach ($conditions as $key => $value) {
             if ($counter > 0) $where .= " AND ";
 
-            $where .= $key . $value[0] ." (";
+            if ($value[0] == " BETWEEN") {
+                $where .= $key . $value[0] . $value[1] . " AND " . $value[2];
+            } else {
+                $where .= $key . $value[0] ." (";
 
-            for($i=1; $i< count($value); $i++) {
-                switch ($i) {
-                    case count($value) - 1:
-                        $where .= $value[$i] . ")";
-                        break;
-                    default:
-                        $where .= $value[$i] . ", ";
-                        break;
+                for($i=1; $i< count($value); $i++) {
+                    switch ($i) {
+                        case count($value) - 1:
+                            $where .= $value[$i] . ")";
+                            break;
+                        default:
+                            $where .= $value[$i] . ", ";
+                            break;
+                    }
                 }
-            }
 
-            $counter++;
+                $counter++;
+            }
         }
         return $this->select('SELECT '.$columns.' FROM [dbo].'.$table.' WHERE '.$where . $order);
     }

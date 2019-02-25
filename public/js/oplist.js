@@ -16,6 +16,7 @@ $(document).ready(function () {
     });
 
     $('.operationListFilter').on('change', sendFilter);
+    $('#filter_operation_date_to').val(getToday());
     // $('.operationsListDescription').on('change', sendOperationDescUpdate);
 });
 
@@ -102,10 +103,12 @@ function sendOperationCardUpdate() {
 
 function sendFilter() {
     var status = collectSelectedValues('status');
+    var card_id = collectSelectedValues('card_id');
     var mcc_id = collectSelectedValues('mcc_id');
     var category = collectSelectedValues('category');
     var type = collectSelectedValues('type');
     status.unshift(" in");
+    card_id.unshift(" in");
     mcc_id.unshift(" in");
     category.unshift(" in");
     type.unshift(" in");
@@ -113,6 +116,8 @@ function sendFilter() {
 
     var filter = {
         status: status,
+        operation_date: [" BETWEEN", '\''+$('#filter_operation_date_from')[0].value+'\'', '\''+$('#filter_operation_date_to')[0].value+' 23:59:59\''],
+        card_id:  card_id,
         mcc_id:  mcc_id,
         category:  category,
         type:  type

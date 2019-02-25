@@ -1,6 +1,6 @@
 <div class="operationsListTable">
     <div class="nav nav-tabs" role="tablist">
-        {% for key, row in op_list_table|batch(50) %}
+        {% for key, row in op_list_table|batch(100) %}
         <a class="nav-item nav-link {% if key == 0 %}active{% endif %}" id="batch_{{ key }}_tab" data-toggle="tab" href="#batch_{{ key }}" role="tab" aria-controls="batch_{{ key }}" aria-selected="{% if key == 0 %}true{% else %}false{% endif %}">{{ key + 1 }}</a>
         {% endfor %}
     </div>
@@ -20,7 +20,7 @@
         {% else %}
         <span>None operations in the database with such parameters</span>
         {% endif %}
-        {% for key, row in op_list_table|batch(50) %}
+        {% for key, row in op_list_table|batch(100) %}
         <div class="tab-pane fade {% if key == 0 %}show active{% endif %}" id="batch_{{ key }}" role="tabpanel" aria-labelledby="batch_{{ key }}_tab">
             {% for column in row %}
             <div class="operationsListTableRow" id="row_{{ column.id }}">

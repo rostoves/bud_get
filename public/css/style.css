@@ -12,6 +12,10 @@
 }
 
 .oplistButtonForm {
+    display: grid;
+    grid-gap: 2px;
+    grid-template-rows: 1fr;
+    grid-template-columns: 125px 250px 275px 187px 200px 132px 95px 168px;
     margin: 10px auto auto 50px;
 }
 
