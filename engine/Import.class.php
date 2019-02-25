@@ -2,11 +2,11 @@
 
 class Import
 {
-    public function getMccList()
+    public static function getMccList()
     {
         $result = Database::getInstance()->getColumn('[name]', '[merchant_codes]');
         Log::getLog()->trace($result);
-        return json_encode($result);
+        return $result;
     }
 
     public static function insertOperationsTable($data) {
@@ -47,7 +47,7 @@ class Import
         if ($cardsCounter) Log::getLog()->info($cardsCounter. " new cards were inserted.");
         if ($operationsCounter) Log::getLog()->info($operationsCounter. " operation(s) were inserted.");
 
-        return json_encode($resultOperations);
+        return $resultOperations;
     }
 
     private static function mergeNewData($oldData, $newData, $index, $column, $table)

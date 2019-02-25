@@ -63,14 +63,18 @@ class Variables {
         Log::getLog()->debug("Processing POST request: ".$action);
         switch($action) {
             case 'import/getMCC':
-                $import = new Import;
-                echo $import->getMccList();
+                echo json_encode(Import::getMccList());
                 break;
             case 'import/importTable':
-                $json = Import::insertOperationsTable($_POST['data']);
+                $json = json_encode(Import::insertOperationsTable($_POST['data']));
                 Log::getLog()->trace("Sended JSON: ".$json);
                 echo $json;
                 Plans::updateRegularPlans();
+                break;
+            case 'import/checkOutdatedPlans':
+                $response = json_encode(OperationList::getOperationsList($_POST['filter']));
+                Log::getLog()->info("Result of checkOutdatedPlans: ". $response);
+                echo $response;
                 break;
             case 'categories/updateMccCat':
                 Categories::updateMccCat($_POST['rowId'], $_POST['field'], $_POST['newValue']);
@@ -103,7 +107,7 @@ class Variables {
 //                OperationList::updateOperationColumn($_POST['rowId'], '[id_description]', $_POST['newValue']);
 //                break;
             case 'op_list_table/getDescList':
-                echo OperationList::getDescList();
+                echo json_encode(OperationList::getDescList());
                 break;
         }
     }

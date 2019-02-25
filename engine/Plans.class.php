@@ -4,7 +4,7 @@ class Plans
 {
     public static function updateRegularPlans()
     {
-        Database::getInstance()->query("DELETE FROM [dbo].[operations] WHERE [id_description] = (2998) AND [operation_date] < ('".date('Y-m-j')."')");
+        Database::getInstance()->query("DELETE FROM [dbo].[operations] WHERE [id_description] = (2998) AND [operation_date] < ('".date('Y-m-j', strtotime("+1 day"))."')");
 
         $conditions_reg = ['[type]' => ['=','\'Regular\''], '[operation_date]' => ['>', 'GetDATE() - DATEPART(dayofyear, GetDATE())'], '[description]' => ['!=', '\'Плановый регулярный расход\'']];
         $regulars =  Database::getInstance()->getColumnsWhereMultiple('[mcc], SUM([bargain_sum])/DATEPART(dayofyear, GetDATE()) [bargain_sum]','[operations_list]', $conditions_reg, 'GROUP BY [mcc]');

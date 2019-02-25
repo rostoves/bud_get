@@ -35,7 +35,7 @@ class OperationList
     {
         $result = Database::getInstance()->getColumn('[description]', '[descriptions]');
         Log::getLog()->trace($result);
-        return json_encode($result);
+        return $result;
     }
 
     public static function getCatsList()
