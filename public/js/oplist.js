@@ -1,6 +1,15 @@
 var descArray = [];
 
 $(document).ready(function () {
+    $('.operationListFilter').on('change', sendFilter);
+    prepareButtons();
+    loadData('op_list_table/getDescList', function () {
+        descArray = this;
+        autocompleteDescription();
+    });
+});
+
+function prepareButtons() {
     $('#addOperationModalButton').on('click', addOperation);
     $('.deleteOperationButton').on('click', operationRowDelete);
     $('#deleteOperationModalButton').on('click', deleteModalAnswer);
@@ -9,16 +18,8 @@ $(document).ready(function () {
     $('.operationListDate').on('change', sendOperationDateUpdate);
     $('.operationListSum').on('change', sendOperationSumUpdate);
     $('.operationListCardSelect').on('change', sendOperationCardUpdate);
-
-    loadData('op_list_table/getDescList', function () {
-        descArray = this;
-        autocompleteDescription();
-    });
-
-    $('.operationListFilter').on('change', sendFilter);
-    $('#filter_operation_date_to').val(getToday());
     // $('.operationsListDescription').on('change', sendOperationDescUpdate);
-});
+}
 
 function autocompleteDescription() {
     $('#addOperationDesc').autocomplete({
@@ -107,21 +108,36 @@ function sendFilter() {
     var mcc_id = collectSelectedValues('mcc_id');
     var category = collectSelectedValues('category');
     var type = collectSelectedValues('type');
-    status.unshift(" in");
-    card_id.unshift(" in");
-    mcc_id.unshift(" in");
-    category.unshift(" in");
-    type.unshift(" in");
+    var filter = {};
 
+    if (status.length > 0) {
+        status.unshift(" in");
+        filter.status = status;
+    }
+    if (card_id.length > 0) {
+        card_id.unshift(" in");
+        filter.card_id = card_id;
+    }
+    if (mcc_id.length > 0) {
+        mcc_id.unshift(" in");
+        filter.mcc_id = mcc_id;
+    }
+    if (category.length > 0) {
+        category.unshift(" in");
+        filter.category = category;
+    }
+    if (type.length > 0) {
+        type.unshift(" in");
+        filter.type = type;
+    }
+    if ($('#filter_operation_date_from')[0].value != "" && $('#filter_operation_date_to')[0].value != "") {
+        filter.operation_date = [" BETWEEN", '\''+$('#filter_operation_date_from')[0].value+'\'', '\''+$('#filter_operation_date_to')[0].value+' 23:59:59\''];
+    } else if ($('#filter_operation_date_from')[0].value != "" && $('#filter_operation_date_to')[0].value == "") {
+        filter.operation_date = [" >=", '\''+$('#filter_operation_date_from')[0].value+'\''];
+    } else if ($('#filter_operation_date_from')[0].value == "" && $('#filter_operation_date_to')[0].value != "") {
+        filter.operation_date = [" <=", '\''+$('#filter_operation_date_to')[0].value+' 23:59:59\''];
+    }
 
-    var filter = {
-        status: status,
-        operation_date: [" BETWEEN", '\''+$('#filter_operation_date_from')[0].value+'\'', '\''+$('#filter_operation_date_to')[0].value+' 23:59:59\''],
-        card_id:  card_id,
-        mcc_id:  mcc_id,
-        category:  category,
-        type:  type
-    };
     console.log(filter);
     $.ajax({
         url: "/op_list_table/",
@@ -133,6 +149,7 @@ function sendFilter() {
         },
         complete: function (data) {
             $('.operationsListTableContainer').html(data.responseText);
+            prepareButtons();
         }
     });
 }
@@ -140,7 +157,7 @@ function sendFilter() {
 function collectSelectedValues(filter) {
     var arr = [];
     $('#filter_'+filter+' option:selected').each(function() {
-        arr.push(this.value);
+        if (this.value !== filter) arr.push(this.value);
     });
     return arr;
 }
