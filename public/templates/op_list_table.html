@@ -8,6 +8,7 @@
         {% if op_list_table %}
         <div class="operationsListTableHeader badge-primary">
             <span>id</span>
+            <span>Status</span>
             <span>Date</span>
             <span>Sum</span>
             <span>Card</span>
@@ -25,6 +26,7 @@
             {% for column in row %}
             <div class="operationsListTableRow" id="row_{{ column.id }}">
                 <span>{{ column.id }}</span>
+                <span>{{ column.status }}</span>
                 <input class="operationListDate" id="date_{{ column.id }}" value="{{ column.operation_date }}">
                 <input class="operationListSum" id="sum_{{ column.id }}" value="{{ column.bargain_sum }}">
                 <select class="operationListCardSelect" id="card_{{ column.id }}">
