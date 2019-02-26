@@ -205,8 +205,15 @@ function renderResultsTable(arr) {
         $("#"+item).remove();
     });
     if (arr.alreadyImportedOperations.length < 1 && arr.notImportedOperations.length < 1) {
-        $( ".importTableHeader").remove();
-        changeImportButtonsForFile();
+        checkOutdatedPlans(function () {
+            console.log(this);
+            if (this == true) {
+                loadOplistWithOutdatedPlans();
+            } else {
+                $( ".importTableHeader").remove();
+                changeImportButtonsForFile();
+            }
+        });
     } else {
         arr.alreadyImportedOperations.forEach(function(item, i, arr) {
             $("#"+item).addClass("badge-warning");
@@ -215,4 +222,29 @@ function renderResultsTable(arr) {
             $("#"+item).addClass("badge-danger");
         });
     }
+}
+
+function checkOutdatedPlans(callback) {
+    var filter = {
+        status: [" =", "'PLAN'"],
+        operation_date: [" <", 'GETDATE()'],
+        type:  [" !=", "'Regular'"]
+    };
+
+    $.ajax({
+        url: "/",
+        type: "POST",
+        dataType: "json",
+        data: {
+            action: 'import/checkOutdatedPlans',
+            filter
+        },
+        complete: function (data) {
+            callback.call(data.responseJSON.length > 0);
+        }
+    });
+}
+
+function loadOplistWithOutdatedPlans() {
+    window.open("/oplist/?filter%5Bstatus%5D%5B%5D=+in&filter%5Bstatus%5D%5B%5D=%27PLAN%27&filter%5Btype%5D%5B%5D=+!=&filter%5Btype%5D%5B%5D=%27Regular%27&filter%5Boperation_date%5D%5B%5D=+<&filter%5Boperation_date%5D%5B%5D=%27"+getToday()+"+23%3A59%3A59%27", "_self");
 }
