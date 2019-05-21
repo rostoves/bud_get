@@ -25,7 +25,7 @@ class Categories
 
     public static function getDescList()
     {
-        $result = Database::getInstance()->getColumns('*', '[descriptions]', ' ORDER BY [description], [id]');
+        $result = Database::getInstance()->getColumns('*', '[descriptions]', ' ORDER BY [id_mcc_desc] DESC, [description], [id]');
         Log::getLog()->trace($result);
         return $result;
     }
@@ -38,6 +38,11 @@ class Categories
     public static function updateCatType($catId, $column, $newCatTypeId)
     {
         return Log::getLog()->info(Database::getInstance()->updateCellValue($column, $newCatTypeId, '[id]', $catId, '[operations_categories]'));
+    }
+
+    public static function updateDescMcc($descId, $column, $newDescMccId)
+    {
+        return Log::getLog()->info(Database::getInstance()->updateCellValue($column, $newDescMccId, '[id]', $descId, '[descriptions]'));
     }
 
     public static function deleteMcc($idMcc, $newMcc)
@@ -61,5 +66,10 @@ class Categories
     public static function updateNameColumn($rowId, $table, $newName)
     {
         return Log::getLog()->info(Database::getInstance()->updateCellValue('[name]', $newName, '[id]', $rowId, $table));
+    }
+
+    public static function updateDescColumn($rowId, $table, $newName)
+    {
+        return Log::getLog()->info(Database::getInstance()->updateCellValue('[description]', $newName, '[id]', $rowId, $table));
     }
 }

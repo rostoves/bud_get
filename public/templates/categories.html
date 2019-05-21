@@ -3,7 +3,7 @@
 {% block title %}Categories{% endblock %}
 
 {% block scripts %}
-    <script src="/js/categories.js"></script>
+    <script src="/js/categories.js" defer></script>
 {% endblock %}
 
 {% block styles %}
@@ -51,13 +51,29 @@
             </div>
         </div>
         <div class="tab-pane fade" id="aria-desc" role="tabpanel">
-            <div class="comparisonBlockDescList">
-                {% for column in desc_list %}
-                <div class="comparisonBlockDesc" id="desc_{{ column.id }}">
-                    <input  class="operationListDescName" id="desc_name_{{ column.id }}" value="{{ column.description }}">
-                    <button type="button" class="deleteDescButton" id="d{{ column.id }}" data-toggle="modal" data-target="#deleteDescModal">Удалить</button>
-                </div>
+            <div class="nav nav-tabs" role="tablist">
+                {% for key, row in desc_list|batch(100) %}
+                <a class="nav-item nav-link {% if key == 0 %}active{% endif %}" id="batch_{{ key }}_tab" data-toggle="tab" href="#batch_{{ key }}" role="tab" aria-controls="batch_{{ key }}" aria-selected="{% if key == 0 %}true{% else %}false{% endif %}">{{ key + 1 }}</a>
                 {% endfor %}
+            </div>
+            <div class="comparisonBlockDescList">
+                <div class="tab-content">
+                    {% for key, row in desc_list|batch(100) %}
+                    <div class="tab-pane fade {% if key == 0 %}show active{% endif %}" id="batch_{{ key }}" role="tabpanel" aria-labelledby="batch_{{ key }}_tab">
+                        {% for column in row %}
+                        <div class="comparisonBlockDesc" id="desc_{{ column.id }}">
+                            <input  class="operationListDescName" id="desc_name_{{ column.id }}" value="{{ column.description }}">
+                            <select class="comparisonBlockMccSelect" id="desc_mcc_{{ column.id }}">
+                                {% for row in mcc_list %}
+                                <option {% if row.id == column.id_mcc_desc %}selected{% endif %} value="{{ row.id }}">{{ row.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="button" class="deleteDescButton" id="d{{ column.id }}" data-toggle="modal" data-target="#deleteDescModal">Удалить</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

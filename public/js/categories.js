@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $(".comparisonBlockCategorySelect").on('change', sendComparisonMccUpdate);
     $(".comparisonBlockTypeSelect").on('change', sendComparisonCatUpdate);
+    $(".comparisonBlockMccSelect").on('change', sendComparisonDescUpdate);
     $('.deleteMccButton').on('click', mccDelete);
     $('#deleteMccModalButton').on('click', deleteMccModalAnswer);
     $('.deleteCatButton').on('click', catDelete);
@@ -18,6 +19,10 @@ function sendComparisonMccUpdate() {
 
 function sendComparisonCatUpdate() {
     sendFieldUpdate('categories/updateCatType', this.id.slice(9), '[id_operations_types]', this.value);
+}
+
+function sendComparisonDescUpdate() {
+    sendFieldUpdate('categories/updateDescMcc', this.id.slice(9), '[id_mcc_desc]', this.value);
 }
 
 function mccDelete() {
@@ -65,5 +70,5 @@ function sendCatNameUpdate() {
 }
 
 function sendDescNameUpdate() {
-    sendFieldUpdate('categories/updateNameColumn', this.id.slice(10), '[descriptions]', '\''+this.value+'\'');
+    sendFieldUpdate('categories/updateDescColumn', this.id.slice(10), '[descriptions]', '\''+this.value+'\'');
 }

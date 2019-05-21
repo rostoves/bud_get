@@ -82,6 +82,9 @@ class Variables {
             case 'categories/updateCatType':
                 Categories::updateCatType($_POST['rowId'], $_POST['field'], $_POST['newValue']);
                 break;
+            case 'categories/updateDescMcc':
+                Categories::updateDescMcc($_POST['rowId'], $_POST['field'], $_POST['newValue']);
+                break;
             case 'categories/deleteMcc':
                 Categories::deleteMcc($_POST['rowId'], $_POST['newValue']);
                 break;
@@ -93,6 +96,9 @@ class Variables {
                 break;
             case 'categories/updateNameColumn':
                 Categories::updateNameColumn($_POST['rowId'], $_POST['field'], $_POST['newValue']);
+                break;
+            case 'categories/updateDescColumn':
+                Categories::updateDescColumn($_POST['rowId'], $_POST['field'], $_POST['newValue']);
                 break;
             case 'op_list_table/addOperation':
                 Import::insertOperationsTable($_POST['data']);
