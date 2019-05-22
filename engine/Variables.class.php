@@ -65,6 +65,9 @@ class Variables {
             case 'import/getMCC':
                 echo json_encode(Import::getMccList());
                 break;
+            case 'import/getDesc':
+                echo json_encode(Import::getDescList());
+                break;
             case 'import/importTable':
                 $json = json_encode(Import::insertOperationsTable($_POST['data']));
                 Log::getLog()->trace("Sended JSON: ".$json);

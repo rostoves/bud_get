@@ -38,13 +38,13 @@ class Database extends PDO
         return $stmt->execute();
     }
 
-    private function select($query, $params = array())
+    public function select($query, $params = array())
     {
         $result = $this->query($query, $params);
         return $result->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function selectColumn($query, $params = array())
+    public function selectColumn($query, $params = array())
     {
         $result = $this->query($query, $params);
         $array = $result->fetchAll(PDO::FETCH_NUM);

@@ -9,6 +9,13 @@ class Import
         return $result;
     }
 
+    public static function getDescList()
+    {
+        $result = Database::getInstance()->select('SELECT D.[description], M.[name] FROM [dbo].[descriptions] D INNER JOIN [dbo].[merchant_codes] M ON D.[id_mcc_desc] = M.[id]');
+        Log::getLog()->trace($result);
+        return $result;
+    }
+
     public static function insertOperationsTable($data) {
         Log::getLog()->trace("Get array for operations insert: ".print_r($data, 1));
         $mcc = Database::getInstance()->getColumn('[name]', '[merchant_codes]');

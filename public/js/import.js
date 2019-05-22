@@ -1,6 +1,7 @@
 var file;
 var parsedCsv;
 var mccArray = [];
+var descArray = [];
 var importTableArray = [];
 
 $(document).ready(function () {
@@ -9,6 +10,10 @@ $(document).ready(function () {
     loadData('import/getMCC', function () {
         mccArray = this;
         console.log(mccArray);
+    });
+    loadData('import/getDesc', function () {
+        descArray = this;
+        console.log(descArray);
     });
 });
 
@@ -83,6 +88,8 @@ function importFile() {
                         case 4:
                         case 6:
                         case 11:
+                            var descCat = findCategoryForDesc(parsedCsv[i][11]);
+                            if (descCat !== false) parsedCsv[i][9] = descCat;
                             $( $( "#tr_" + i) ).append( "<input value='" + parsedCsv[i][j] + "'>" );
                             break;
                         case 9:
@@ -114,6 +121,18 @@ function importFile() {
     $('.deleteImportRowButton').on('click', rowDelete);
     autocompleteCategories();
     changeImportButtonsForExport();
+}
+
+function findCategoryForDesc(_cellDesc) {
+    var result = false;
+    for (var i = 0; i < descArray.length - 1; i++) {
+        if (descArray[i].description === _cellDesc) {
+            result = descArray[i].name;
+            console.log("Change category to "+result+" for "+_cellDesc);
+        }
+    }
+
+    return result;
 }
 
 function markNewCategory(_category, _selector) {
