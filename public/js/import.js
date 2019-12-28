@@ -21,6 +21,7 @@ $(document).ready(function () {
         // console.log(descArray);
         autocompleteDescription();
     });
+    // $('#addOperationModalButton').on('click', addOperation);
 });
 
 function autocompleteDescription() {

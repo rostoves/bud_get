@@ -6,7 +6,6 @@ $(document).ready(function () {
 });
 
 function prepareButtons() {
-    $('#addOperationModalButton').on('click', addOperation);
     $('.deleteOperationButton').on('click', operationRowDelete);
     $('#deleteOperationModalButton').on('click', deleteModalAnswer);
     $('.operationListMccSelect').on('change', sendOperationMccUpdate);
