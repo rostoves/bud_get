@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Types{% endblock %}
+
+{% block scripts %}
+    <script src="/js/types.js" defer></script>
+{% endblock %}
+
+{% block styles %}
+
+{% endblock %}
+
+{% block main %}
+
+<div class="row categoriesComparisonBlock">
+    <div class="comparisonBlockContent">
+        <div class="comparisonBlockCatsTypes">
+            {% for column in cats_list %}
+            <div class="comparisonBlockCats" id="cat_{{ column.id }}">
+                <input  class="operationListCatName" id="cat_name_{{ column.id }}" value="{{ column.name }}">
+                <select class="comparisonBlockTypeSelect" id="cat_type_{{ column.id }}">
+                    {% for row in types_list %}
+                    <option {% if row.id == column.id_operations_types %}selected{% endif %} value="{{ row.id }}">{{ row.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" class="deleteCatButton" id="d{{ column.id }}" data-toggle="modal" data-target="#deleteCatModal">Удалить</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteCatModal" tabindex="-1" role="dialog" aria-labelledby="deleteCatModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteCatModalLabel">Deleting category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you really want to delete the category?
+                <div class="form-group row">
+                    <label for="newCatSelect" class="col-sm-5 col-form-label">Choose new category</label>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="newCatSelect">
+                            <option selected value> -- choose -- </option>
+                            {% for row in cats_list %}
+                            <option value="{{ row.id }}">{{ row.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
+                <button type="button" class="btn btn-danger" id="deleteCatModalButton" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

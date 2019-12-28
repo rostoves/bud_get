@@ -30,10 +30,18 @@ class Variables {
                 [
                     "href" => "/categories/",
                     "link_title" => "Categories"
+                ],
+                [
+                    "href" => "/types/",
+                    "link_title" => "Types"
+                ],
+                [
+                    "href" => "/descriptions/",
+                    "link_title" => "Descriptions"
                 ]
             ]
         ];
-
+        Log::getLog()->trace("Processing page name: ".$page_name);
         switch ($page_name) {
             case "index":
                 break;
@@ -48,10 +56,16 @@ class Variables {
             case "import":
                 break;
             case "categories":
-                $vars['types_list'] = Categories::getTypesList();
                 $vars['mcc_list'] = Categories::getMccList();
                 $vars['cats_list'] = Categories::getCategoriesList();
-                $vars['desc_list'] = Categories::getDescList();
+                break;
+            case "types":
+                $vars['types_list'] = Types::getTypesList();
+                $vars['cats_list'] = Categories::getCategoriesList();
+                break;
+            case "descriptions":
+                $vars['mcc_list'] = Categories::getMccList();
+                $vars['desc_list'] = Descriptions::getDescList();
                 break;
         }
 
@@ -82,26 +96,26 @@ class Variables {
             case 'categories/updateMccCat':
                 Categories::updateMccCat($_POST['rowId'], $_POST['field'], $_POST['newValue']);
                 break;
-            case 'categories/updateCatType':
-                Categories::updateCatType($_POST['rowId'], $_POST['field'], $_POST['newValue']);
-                break;
-            case 'categories/updateDescMcc':
-                Categories::updateDescMcc($_POST['rowId'], $_POST['field'], $_POST['newValue']);
-                break;
             case 'categories/deleteMcc':
                 Categories::deleteMcc($_POST['rowId'], $_POST['newValue']);
-                break;
-            case 'categories/deleteCat':
-                Categories::deleteCat($_POST['rowId'], $_POST['newValue']);
-                break;
-            case 'categories/deleteDesc':
-                Categories::deleteDesc($_POST['rowId'], $_POST['newValue']);
                 break;
             case 'categories/updateNameColumn':
                 Categories::updateNameColumn($_POST['rowId'], $_POST['field'], $_POST['newValue']);
                 break;
-            case 'categories/updateDescColumn':
-                Categories::updateDescColumn($_POST['rowId'], $_POST['field'], $_POST['newValue']);
+            case 'types/updateCatType':
+                Types::updateCatType($_POST['rowId'], $_POST['field'], $_POST['newValue']);
+                break;
+            case 'types/deleteCat':
+                Types::deleteCat($_POST['rowId'], $_POST['newValue']);
+                break;
+            case 'descriptions/updateDescMcc':
+                Descriptions::updateDescMcc($_POST['rowId'], $_POST['field'], $_POST['newValue']);
+                break;
+            case 'descriptions/deleteDesc':
+                Descriptions::deleteDesc($_POST['rowId'], $_POST['newValue']);
+                break;
+            case 'descriptions/updateDescColumn':
+                Descriptions::updateDescColumn($_POST['rowId'], $_POST['field'], $_POST['newValue']);
                 break;
             case 'op_list_table/addOperation':
                 Import::insertOperationsTable($_POST['data']);

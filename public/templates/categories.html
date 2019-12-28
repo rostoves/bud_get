@@ -13,68 +13,19 @@
 {% block main %}
 
 <div class="row categoriesComparisonBlock">
-    <div class="nav flex-column nav-pills comparisonBlockMenu" role="tablist" aria-orientation="vertical">
-        <a class="nav-link comparisonBlockMenuLink active" id="tab-mcc-cats" data-toggle="pill" href="#aria-mcc-cats" role="tab" aria-selected="true">MCC -> Categories</a>
-        <a class="nav-link comparisonBlockMenuLink" id="tab-cats-types" data-toggle="pill" href="#aria-cats-types" role="tab" aria-selected="false">Categories -> Types</a>
-        <a class="nav-link comparisonBlockMenuLink" id="tab-desc" data-toggle="pill" href="#aria-desc" role="tab" aria-selected="false">Descriptions</a>
-    </div>
-    <div class="tab-content comparisonBlockContent">
-        <div class="tab-pane fade show active" id="aria-mcc-cats" role="tabpanel">
-            <div class="comparisonBlockMccCats">
-                {% for column in mcc_list %}
-                <div class="comparisonBlockMcc" id="mcc_{{ column.id }}">
-                    <input class="operationListMccName" id="mcc_name_{{ column.id }}" value="{{ column.name }}">
-                    <select class="comparisonBlockCategorySelect" id="mcc_cat_{{ column.id }}">
-                        {% for row in cats_list %}
-                        <option {% if row.id == column.id_operations_categories %}selected{% endif %} value="{{ row.id }}">{{ row.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="button" class="deleteMccButton" id="d{{ column.id }}" data-toggle="modal" data-target="#deleteMccModal">Удалить</button>
-                </div>
-
-                {% endfor %}
-            </div>
-        </div>
-        <div class="tab-pane fade" id="aria-cats-types" role="tabpanel">
-            <div class="comparisonBlockCatsTypes">
-                {% for column in cats_list %}
-                <div class="comparisonBlockCats" id="cat_{{ column.id }}">
-                    <input  class="operationListCatName" id="cat_name_{{ column.id }}" value="{{ column.name }}">
-                    <select class="comparisonBlockTypeSelect" id="cat_type_{{ column.id }}">
-                        {% for row in types_list %}
-                        <option {% if row.id == column.id_operations_types %}selected{% endif %} value="{{ row.id }}">{{ row.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="button" class="deleteCatButton" id="d{{ column.id }}" data-toggle="modal" data-target="#deleteCatModal">Удалить</button>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="tab-pane fade" id="aria-desc" role="tabpanel">
-            <div class="nav nav-tabs" role="tablist">
-                {% for key, row in desc_list|batch(100) %}
-                <a class="nav-item nav-link {% if key == 0 %}active{% endif %}" id="batch_{{ key }}_tab" data-toggle="tab" href="#batch_{{ key }}" role="tab" aria-controls="batch_{{ key }}" aria-selected="{% if key == 0 %}true{% else %}false{% endif %}">{{ key + 1 }}</a>
-                {% endfor %}
-            </div>
-            <div class="comparisonBlockDescList">
-                <div class="tab-content">
-                    {% for key, row in desc_list|batch(100) %}
-                    <div class="tab-pane fade {% if key == 0 %}show active{% endif %}" id="batch_{{ key }}" role="tabpanel" aria-labelledby="batch_{{ key }}_tab">
-                        {% for column in row %}
-                        <div class="comparisonBlockDesc" id="desc_{{ column.id }}">
-                            <input  class="operationListDescName" id="desc_name_{{ column.id }}" value="{{ column.description }}">
-                            <select class="comparisonBlockMccSelect" id="desc_mcc_{{ column.id }}">
-                                {% for row in mcc_list %}
-                                <option {% if row.id == column.id_mcc_desc %}selected{% endif %} value="{{ row.id }}">{{ row.name }}</option>
-                                {% endfor %}
-                            </select>
-                            <button type="button" class="deleteDescButton" id="d{{ column.id }}" data-toggle="modal" data-target="#deleteDescModal">Удалить</button>
-                        </div>
-                        {% endfor %}
-                    </div>
+    <div class="comparisonBlockContent">
+        <div class="comparisonBlockMccCats">
+            {% for column in mcc_list %}
+            <div class="comparisonBlockMcc" id="mcc_{{ column.id }}">
+                <input class="operationListMccName" id="mcc_name_{{ column.id }}" value="{{ column.name }}">
+                <select class="comparisonBlockCategorySelect" id="mcc_cat_{{ column.id }}">
+                    {% for row in cats_list %}
+                    <option {% if row.id == column.id_operations_categories %}selected{% endif %} value="{{ row.id }}">{{ row.name }}</option>
                     {% endfor %}
-                </div>
+                </select>
+                <button type="button" class="deleteMccButton" id="d{{ column.id }}" data-toggle="modal" data-target="#deleteMccModal">Удалить</button>
             </div>
+            {% endfor %}
         </div>
     </div>
 </div>
@@ -106,70 +57,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
                 <button type="button" class="btn btn-danger" id="deleteMccModalButton" data-dismiss="modal">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="deleteCatModal" tabindex="-1" role="dialog" aria-labelledby="deleteCatModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteCatModalLabel">Deleting category</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Do you really want to delete the category?
-                <div class="form-group row">
-                    <label for="newCatSelect" class="col-sm-5 col-form-label">Choose new category</label>
-                    <div class="col-sm-7">
-                        <select class="form-control" id="newCatSelect">
-                            <option selected value> -- choose -- </option>
-                            {% for row in cats_list %}
-                            <option value="{{ row.id }}">{{ row.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
-                <button type="button" class="btn btn-danger" id="deleteCatModalButton" data-dismiss="modal">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="deleteDescModal" tabindex="-1" role="dialog" aria-labelledby="deleteDescModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteDescModalLabel">Deleting description</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Do you really want to delete the description?
-                <div class="form-group row">
-                    <label for="newDescSelect" class="col-sm-5 col-form-label">Choose new description</label>
-                    <div class="col-sm-7">
-                        <select class="form-control" id="newDescSelect">
-                            <option selected value> -- choose -- </option>
-                            {% for row in desc_list %}
-                            <option value="{{ row.id }}">{{ row.description }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Nope</button>
-                <button type="button" class="btn btn-danger" id="deleteDescModalButton" data-dismiss="modal">Delete</button>
             </div>
         </div>
     </div>
