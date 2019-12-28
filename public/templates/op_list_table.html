@@ -11,7 +11,7 @@
             <span>Status</span>
             <span>Date</span>
             <span>Sum</span>
-            <span>Card</span>
+            <!--<span>Card</span>-->
             <span>Description</span>
             <span>MCC</span>
             <span>Category</span>
@@ -29,11 +29,11 @@
                 <span>{{ column.status }}</span>
                 <input class="operationListDate" id="date_{{ column.id }}" value="{{ column.operation_date }}">
                 <input class="operationListSum" id="sum_{{ column.id }}" value="{{ column.bargain_sum }}">
-                <select class="operationListCardSelect" id="card_{{ column.id }}">
-                    {% for row in cards_list %}
-                    <option {% if row.id == column.card_id %}selected{% endif %} value="{{ row.id }}">{{ row.bank }} {{ row.name }} {{ row.owner }}</option>
-                    {% endfor %}
-                </select>
+                <!--<select class="operationListCardSelect" id="card_{{ column.id }}">-->
+                    <!--{% for row in cards_list %}-->
+                    <!--<option {% if row.id == column.card_id %}selected{% endif %} value="{{ row.id }}">{{ row.bank }} {{ row.name }} {{ row.owner }}</option>-->
+                    <!--{% endfor %}-->
+                <!--</select>-->
                 <span>{{ column.description }}</span>
                 <!--<input class="operationsListDescription" id="desc_{{ column.id }}" value="{{ column.description }}">-->
                 <select class="operationListMccSelect" id="select_{{ column.id }}">

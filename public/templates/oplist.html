@@ -26,12 +26,12 @@
             <input class="form-control col-sm-8 operationListFilter" type="date" value="" id="filter_operation_date_to">
         </div>
     </div>
-    <select multiple class="custom-select operationListFilter" id="filter_card_id">
-        <option selected value="card_id"> -- Card -- </option>
-        {% for row in cards_list %}
-        <option value="{{ row.id }}">{{ row.bank }} {{ row.name }} {{ row.owner }}</option>
-        {% endfor %}
-    </select>
+    <!--<select multiple class="custom-select operationListFilter" id="filter_card_id">-->
+        <!--<option selected value="card_id"> &#45;&#45; Card &#45;&#45; </option>-->
+        <!--{% for row in cards_list %}-->
+        <!--<option value="{{ row.id }}">{{ row.bank }} {{ row.name }} {{ row.owner }}</option>-->
+        <!--{% endfor %}-->
+    <!--</select>-->
     <select multiple class="custom-select operationListFilter" id="filter_mcc_id">
         <option selected value="mcc_id"> -- MCC -- </option>
         {% for row in mcc_list %}

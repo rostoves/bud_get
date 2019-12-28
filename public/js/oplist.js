@@ -17,7 +17,7 @@ function prepareButtons() {
     $('.operationListComment').on('change', sendOperationCommentUpdate);
     $('.operationListDate').on('change', sendOperationDateUpdate);
     $('.operationListSum').on('change', sendOperationSumUpdate);
-    $('.operationListCardSelect').on('change', sendOperationCardUpdate);
+    // $('.operationListCardSelect').on('change', sendOperationCardUpdate);
     // $('.operationsListDescription').on('change', sendOperationDescUpdate);
 }
 
@@ -94,9 +94,9 @@ function sendOperationSumUpdate() {
     sendFieldUpdate('op_list_table/updateOperation', this.id.slice(4), '[bargain_sum]', this.value);
 }
 
-function sendOperationCardUpdate() {
-    sendFieldUpdate('op_list_table/updateOperation', this.id.slice(5), '[id_card]', this.value);
-}
+// function sendOperationCardUpdate() {
+//     sendFieldUpdate('op_list_table/updateOperation', this.id.slice(5), '[id_card]', this.value);
+// }
 
 // function sendOperationDescUpdate() {
 //     sendFieldUpdate('op_list_table/updateOperationDesc', this.id.slice(5), this.value);
@@ -104,7 +104,7 @@ function sendOperationCardUpdate() {
 
 function sendFilter() {
     var status = collectSelectedValues('status');
-    var card_id = collectSelectedValues('card_id');
+    // var card_id = collectSelectedValues('card_id');
     var mcc_id = collectSelectedValues('mcc_id');
     var category = collectSelectedValues('category');
     var type = collectSelectedValues('type');
@@ -114,10 +114,10 @@ function sendFilter() {
         status.unshift(" in");
         filter.status = status;
     }
-    if (card_id.length > 0) {
-        card_id.unshift(" in");
-        filter.card_id = card_id;
-    }
+    // if (card_id.length > 0) {
+    //     card_id.unshift(" in");
+    //     filter.card_id = card_id;
+    // }
     if (mcc_id.length > 0) {
         mcc_id.unshift(" in");
         filter.mcc_id = mcc_id;

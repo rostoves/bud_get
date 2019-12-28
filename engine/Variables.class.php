@@ -49,7 +49,7 @@ class Variables {
             case "op_list_table":
                 $vars['op_list_table'] = OperationList::getOperationsList($_GET['filter'], $_GET['order']);
                 $vars['mcc_list'] = OperationList::getMccList();
-                $vars['cards_list'] = OperationList::getCardList();
+               // $vars['cards_list'] = OperationList::getCardList();
                 $vars['cats_list'] = OperationList::getCatsList();
                 $vars['types_list'] = OperationList::getTypesList();
                 break;
