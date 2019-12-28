@@ -31,13 +31,6 @@ class OperationList
         return $result;
     }
 
-    public static function getDescList()
-    {
-        $result = Database::getInstance()->getColumn('[description]', '[descriptions]');
-        Log::getLog()->trace($result);
-        return $result;
-    }
-
     public static function getCatsList()
     {
         $result = Database::getInstance()->getColumn('[name]', '[operations_categories]');

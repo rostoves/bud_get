@@ -54,6 +54,8 @@ class Variables {
                 $vars['types_list'] = OperationList::getTypesList();
                 break;
             case "import":
+                $vars['mcc_list'] = OperationList::getMccList();
+                $vars['cards_list'] = OperationList::getCardList();
                 break;
             case "categories":
                 $vars['mcc_list'] = Categories::getMccList();
@@ -82,6 +84,9 @@ class Variables {
             case 'import/getDesc':
                 echo json_encode(Import::getDescList());
                 break;
+            case 'import/getFullDescList':
+                echo json_encode(Import::getFullDescList());
+                break;
             case 'import/importTable':
                 $json = json_encode(Import::insertOperationsTable($_POST['data']));
                 Log::getLog()->trace("Sended JSON: ".$json);
@@ -92,6 +97,9 @@ class Variables {
                 $response = json_encode(OperationList::getOperationsList($_POST['filter']));
                 Log::getLog()->info("Result of checkOutdatedPlans: ". $response);
                 echo $response;
+                break;
+            case 'import/addOperation':
+                Import::insertOperationsTable($_POST['data']);
                 break;
             case 'categories/updateMccCat':
                 Categories::updateMccCat($_POST['rowId'], $_POST['field'], $_POST['newValue']);

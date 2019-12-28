@@ -2,6 +2,7 @@ var file;
 var parsedCsv;
 var mccArray = [];
 var descArray = [];
+var descFullArray = [];
 var importTableArray = [];
 
 $(document).ready(function () {
@@ -9,13 +10,63 @@ $(document).ready(function () {
     $('#loadFileButton').on('click', importFile);
     loadData('import/getMCC', function () {
         mccArray = this;
-        console.log(mccArray);
+        // console.log(mccArray);
     });
     loadData('import/getDesc', function () {
         descArray = this;
-        console.log(descArray);
+        // console.log(descArray);
+    });
+    loadData('import/getFullDescList', function () {
+        descFullArray = this;
+        // console.log(descArray);
+        autocompleteDescription();
     });
 });
+
+function autocompleteDescription() {
+    $('#addOperationDesc').autocomplete({
+        source: descFullArray
+    });
+}
+
+function addOperation() {
+    var status = $('#addOperationStatus')[0].value;
+    var date = new Date($('#addOperationDate')[0].value);
+    var card = $('#addOperationCard')[0].value;
+    var sum = $('#addOperationSum')[0].value;
+    var mcc = $('#addOperationMcc')[0].value;
+    var desc = $('#addOperationDesc')[0].value;
+    var comment = $('#addOperationComment')[0].value;
+    var operation = [];
+
+    if ($('#addOperationDateRepeat').prop("checked")) {
+        console.log('Repeatable operation, every '+$('#addOperationDatePeriod')[0].value);
+
+        for (let i = 0; i<$('#addOperationRepeatCount')[0].value; i++) {
+            operation.push([$.format.date(date+'T00:00:00+03:00', 'dd.MM.yyyy'), card, status, sum, 'RUB', sum, 'RUB', mcc, desc, 0, comment, '']);
+            switch ($('#addOperationDatePeriod')[0].value) {
+                case 'month':
+                    date.setMonth(date.getMonth()+1);
+                    break;
+                case 'week':
+                    date.setDate(date.getDate()+7);
+                    break;
+                case 'day':
+                    date.setDate(date.getDate()+1);
+                    break;
+                case 'year':
+                    date.setFullYear(date.getFullYear()+1);
+                    break;
+            }
+        }
+        console.log(operation);
+        sendPOST('import/addOperation', operation);
+    } else {
+        operation.push([$.format.date(date+'T00:00:00+03:00', 'dd.MM.yyyy'), card, status, sum, 'RUB', sum, 'RUB', mcc, desc, 0, comment, '']);
+        console.log(operation);
+        sendPOST('import/addOperation', operation);
+    }
+}
 
 function parseFile() {
     file = this.files[0];

@@ -16,6 +16,13 @@ class Import
         return $result;
     }
 
+    public static function getFullDescList()
+    {
+        $result = Database::getInstance()->getColumn('[description]', '[descriptions]');
+        Log::getLog()->trace($result);
+        return $result;
+    }
+
     public static function insertOperationsTable($data) {
         Log::getLog()->trace("Get array for operations insert: ".print_r($data, 1));
         $mcc = Database::getInstance()->getColumn('[name]', '[merchant_codes]');
