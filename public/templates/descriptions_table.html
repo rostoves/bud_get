@@ -2,7 +2,7 @@
     {% for column in desc_list %}
     <div class="comparisonBlockDesc" id="desc_{{ column.id }}">
         <input  class="operationListDescName" id="desc_name_{{ column.id }}" value="{{ column.description }}">
-        <select id="desc_mcc_{{ column.id }}">
+        <select class="comparisonBlockMccSelect" id="desc_mcc_{{ column.id }}">
             {% for row in mcc_list %}
             <option {% if row.id == column.id_mcc_desc %}selected{% endif %} value="{{ row.id }}">{{ row.name }}</option>
             {% endfor %}
