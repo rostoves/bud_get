@@ -57,8 +57,13 @@
 }
 
 .comparisonBlockContent {
-    width: 80%;
+    width: 90%;
     padding: 5px 600px 0 400px;
+}
+
+.descriptionsSearch {
+    width: 100%;
+    margin-bottom: 1px;
 }
 
 .comparisonBlockMcc,

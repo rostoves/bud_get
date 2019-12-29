@@ -2,9 +2,15 @@
 
 class Descriptions
 {
-    public static function getDescList()
+    public static function getDescList($search = NULL)
     {
-        $result = Database::getInstance()->getColumns('*', '[descriptions]', ' ORDER BY [id_mcc_desc] DESC, [description], [id]');
+        if ($search != NULL) {
+            Log::getLog()->info("Descriptions search string: " . $search);
+            $result = Database::getInstance()->getColumnsWhereSingle('TOP (200) *', '[descriptions]', '[description]',' like', "'%".$search."%'",' ORDER BY [id_mcc_desc] DESC, [description], [id]');
+        } else {
+            $result = Database::getInstance()->getColumns('TOP (200) *', '[descriptions]', ' ORDER BY [id_mcc_desc] DESC, [description], [id]');
+        }
+        Log::getLog()->info("Returned descriptions list: " . count($result) . " rows");
         Log::getLog()->trace($result);
         return $result;
     }

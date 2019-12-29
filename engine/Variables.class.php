@@ -66,8 +66,9 @@ class Variables {
                 $vars['cats_list'] = Categories::getCategoriesList();
                 break;
             case "descriptions":
+            case "descriptions_table":
                 $vars['mcc_list'] = Categories::getMccList();
-                $vars['desc_list'] = Descriptions::getDescList();
+                $vars['desc_list'] = Descriptions::getDescList($_GET['search']);
                 break;
         }
 
@@ -137,9 +138,9 @@ class Variables {
 //            case 'op_list_table/updateOperationDesc':
 //                OperationList::updateOperationColumn($_POST['rowId'], '[id_description]', $_POST['newValue']);
 //                break;
-            case 'op_list_table/getDescList':
-                echo json_encode(OperationList::getDescList());
-                break;
+//            case 'op_list_table/getDescList':
+//                echo json_encode(OperationList::getDescList());
+//                break;
         }
     }
 }
