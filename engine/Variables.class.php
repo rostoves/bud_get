@@ -38,6 +38,10 @@ class Variables {
                 [
                     "href" => "/descriptions/",
                     "link_title" => "Descriptions"
+                ],
+                [
+                    "href" => "/calc/",
+                    "link_title" => "Calculator"
                 ]
             ]
         ];

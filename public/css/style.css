@@ -81,3 +81,12 @@
 .comparisonBlockDesc {
     grid-template-columns: 2.5fr 0.5fr 0.5fr;
 }
+
+.calculatorForm {
+    margin: 10px 50px auto 500px;
+}
+
+.calculatorFormItem {
+    display: grid;
+    grid-template-columns: 100px 150px;
+}
