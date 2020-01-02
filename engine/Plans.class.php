@@ -6,8 +6,8 @@ class Plans
     {
         Database::getInstance()->query("DELETE FROM [dbo].[operations] WHERE [id_description] = (2998) AND [operation_date] < ('".date('Y-m-j', strtotime("+1 day"))."')");
 
-        $conditions_reg = ['[type]' => ['=','\'Regular\''], '[operation_date]' => ['>', 'GetDATE() - DATEPART(dayofyear, GetDATE())'], '[description]' => ['!=', '\'Плановый регулярный расход\'']];
-        $regulars =  Database::getInstance()->getColumnsWhereMultiple('[mcc], SUM([bargain_sum])/DATEPART(dayofyear, GetDATE()) [bargain_sum]','[operations_list]', $conditions_reg, 'GROUP BY [mcc]');
+        $conditions_reg = ['[type]' => ['=','\'Regular\''], '[operation_date]' => ['>', 'GetDATE() - '.DAYS_FOR_REGULARS_CALC], '[description]' => ['!=', '\'Плановый регулярный расход\'']];
+        $regulars =  Database::getInstance()->getColumnsWhereMultiple('[mcc], SUM([bargain_sum])/'.DAYS_FOR_REGULARS_CALC.' [bargain_sum]','[operations_list]', $conditions_reg, 'GROUP BY [mcc]');
         Log::getLog()->info("Got average sums for regular categories operations: " . print_r($regulars, 1));
 
         foreach ($regulars as $mcc) {

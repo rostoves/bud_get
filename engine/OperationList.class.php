@@ -11,7 +11,7 @@ class OperationList
             $conditions['status'] = [' =','\'OK\''];
             $order = ' ORDER BY [operation_date] DESC';
         }
-        $oplist =  Database::getInstance()->getColumnsWhereMultiple('TOP (200) *','[operations_list]', $conditions, $order);
+        $oplist =  Database::getInstance()->getColumnsWhereMultiple('TOP ('.OP_NUMBER_SELECT.') *','[operations_list]', $conditions, $order);
         Log::getLog()->info("Returned operations list: " . count($oplist) . " rows");
         Log::getLog()->trace("Full operations list data: ". print_r($oplist,1));
         return $oplist;
