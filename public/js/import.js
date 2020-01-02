@@ -8,6 +8,7 @@ var importTableArray = [];
 $(document).ready(function () {
     $('#importCsvFileInput').on('change', parseFile);
     $('#loadFileButton').on('click', importFile);
+    $('#addOperationModalButton').on('click', addOperation);
     loadData('import/getMCC', function () {
         mccArray = this;
         // console.log(mccArray);
@@ -21,7 +22,6 @@ $(document).ready(function () {
         // console.log(descArray);
         autocompleteDescription();
     });
-    // $('#addOperationModalButton').on('click', addOperation);
 });
 
 function autocompleteDescription() {
@@ -31,6 +31,7 @@ function autocompleteDescription() {
 }
 
 function addOperation() {
+    console.log('Adding operation.');
     var status = $('#addOperationStatus')[0].value;
     var date = new Date($('#addOperationDate')[0].value);
     var card = $('#addOperationCard')[0].value;
